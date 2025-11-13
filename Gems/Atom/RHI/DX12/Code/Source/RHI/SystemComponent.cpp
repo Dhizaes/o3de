@@ -94,8 +94,7 @@ namespace AZ
 
         RHI::APIPriority SystemComponent::GetDefaultPriority()
         {
-            // We want dx12 to be default RHI (unless the user choose otherwise).
-            return RHI::APITopPriority;
+            return RHI::APIMiddlePriority;
         }
 
         bool SystemComponent::SupportsXR() const

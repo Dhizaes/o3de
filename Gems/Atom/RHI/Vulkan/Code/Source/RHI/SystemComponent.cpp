@@ -116,7 +116,8 @@ namespace AZ
 
         RHI::APIPriority SystemComponent::GetDefaultPriority()
         {
-            return RHI::APIMiddlePriority;
+            // We want Vulkan to be default RHI (unless the user choose otherwise).
+            return RHI::APITopPriority;
         }
 
         RHI::APIType SystemComponent::GetType()
