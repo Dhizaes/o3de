@@ -69,7 +69,6 @@ namespace AZ
             AzFramework::WindowNotificationBus::Handler::BusDisconnect(m_windowHandle);
 
             DestroyDefaultSwapChain();
-            DestroyXRSwapChains();
 
             m_swapChainsData.clear();
         }
@@ -147,7 +146,6 @@ namespace AZ
         void WindowContext::OnWindowClosed()
         {
             DestroyDefaultSwapChain();
-            DestroyXRSwapChains();
 
             // We don't want to listen to events anymore if the window has closed
             AzFramework::ExclusiveFullScreenRequestBus::Handler::BusDisconnect(m_windowHandle);
@@ -252,62 +250,11 @@ namespace AZ
                 m_swapChainsData.insert(
                     m_swapChainsData.begin() + defaultSwapChainIndex, SwapChainData{ swapChain, viewport, scissor });
             }
-
-            // Add XR pipelines if it is active
-            XRRenderingInterface* xrSystem = RPISystemInterface::Get()->GetXRSystem();
-            if (xrSystem)
-            {
-                const AZ::u32 numXrViews = xrSystem->GetNumViews();
-                AZ_Assert(numXrViews <= 2, "Atom only supports two XR views");
-                for (AZ::u32 i = 0; i < numXrViews; i++)
-                {
-                    RHI::Ptr<RHI::SwapChain> xrSwapChain = aznew RHI::SwapChain;
-                    RHI::SwapChainDescriptor xrDescriptor;
-                    xrDescriptor.m_dimensions.m_imageWidth = xrSystem->GetSwapChainWidth(i);
-                    xrDescriptor.m_dimensions.m_imageHeight = xrSystem->GetSwapChainHeight(i);
-                    xrDescriptor.m_dimensions.m_imageCount = AZ::RHI::Limits::Device::FrameCountMax;
-                    xrDescriptor.m_isXrSwapChain = true;
-                    xrDescriptor.m_xrSwapChainIndex = i;
-                    xrDescriptor.m_dimensions.m_imageFormat = xrSystem->GetSwapChainFormat(i);
-                    xrDescriptor.m_scalingMode = m_swapChainScalingMode;
-
-                    const AZStd::string xrAttachmentName = AZStd::string::format("XRSwapChain_View_%i", i);
-                    xrDescriptor.m_attachmentId = RHI::AttachmentId{ xrAttachmentName.c_str() };
-                    xrSwapChain->Init(device.GetDeviceIndex(), xrDescriptor);
-                    xrDescriptor = xrSwapChain->GetDescriptor(); // Get descriptor from swapchain because it can set different values during initialization
-
-                    RHI::Viewport xrViewport;
-                    xrViewport.m_maxX = static_cast<float>(xrDescriptor.m_dimensions.m_imageWidth);
-                    xrViewport.m_maxY = static_cast<float>(xrDescriptor.m_dimensions.m_imageHeight);
-
-                    RHI::Scissor xrScissor;
-                    xrScissor.m_maxX = static_cast<int16_t>(xrDescriptor.m_dimensions.m_imageWidth);
-                    xrScissor.m_maxY = static_cast<int16_t>(xrDescriptor.m_dimensions.m_imageHeight);
-
-                    uint32_t xrSwapChainIndex = i == 0 ? static_cast<uint32_t>(ViewType::XrLeft) : static_cast<uint32_t>(ViewType::XrRight);
-                    if (xrSwapChainIndex < m_swapChainsData.size())
-                    {
-                        m_swapChainsData[xrSwapChainIndex].m_swapChain = xrSwapChain;
-                        m_swapChainsData[xrSwapChainIndex].m_viewport = xrViewport;
-                        m_swapChainsData[xrSwapChainIndex].m_scissor = xrScissor;
-                    }
-                    else
-                    {
-                        m_swapChainsData.insert(m_swapChainsData.begin() + xrSwapChainIndex, SwapChainData{xrSwapChain, xrViewport, xrScissor});
-                    }
-                }
-            }
         }
 
         void WindowContext::DestroyDefaultSwapChain()
         {
             DestroySwapChain(DefaultViewType);
-        }
-
-        void WindowContext::DestroyXRSwapChains()
-        {
-            DestroySwapChain(static_cast<uint32_t>(ViewType::XrLeft));
-            DestroySwapChain(static_cast<uint32_t>(ViewType::XrRight));
         }
 
         void WindowContext::DestroySwapChain(uint32_t swapChainIndex)

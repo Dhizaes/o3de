@@ -72,17 +72,6 @@ namespace AZ
                             allSceneViews.insert(view.get());
                         }
                     }
-                    else
-                    {
-                        AZ::RPI::ViewPtr stereoscopicView = nullptr;
-                        AZ::RPI::ViewProviderBus::EventResult(
-                            stereoscopicView, cameraEntityId, &AZ::RPI::ViewProvider::GetStereoscopicView, static_cast<AZ::RPI::ViewType>(i));
-
-                        if (stereoscopicView != nullptr)
-                        {
-                            allSceneViews.insert(stereoscopicView.get());
-                        }
-                    }
                 }
             }
 

@@ -45,7 +45,6 @@ namespace AZ
             ViewportContextPtr GetViewportContextByScene(const Scene* scene) const override;
 
             ViewPtr GetCurrentView(const Name& context);
-            ViewPtr GetCurrentStereoscopicView(const Name& context, ViewType viewType);
             
         private:
             void RegisterViewportContext(const Name& contextName, ViewportContextPtr viewportContext);

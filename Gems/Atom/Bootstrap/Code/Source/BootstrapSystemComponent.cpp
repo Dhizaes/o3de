@@ -128,9 +128,6 @@ void cvar_r_renderScale_Changed(const float& newRenderScale)
 }
 
 AZ_CVAR(AZ::CVarFixedString, r_renderPipelinePath, AZ_TRAIT_BOOTSTRAPSYSTEMCOMPONENT_PIPELINE_NAME, cvar_r_renderPipelinePath_Changed, AZ::ConsoleFunctorFlags::DontReplicate, "The asset (.azasset) path for default render pipeline");
-AZ_CVAR(AZ::CVarFixedString, r_default_openxr_pipeline_name, "passes/MultiViewRenderPipeline.azasset", nullptr, AZ::ConsoleFunctorFlags::DontReplicate, "Default openXr render pipeline name");
-AZ_CVAR(AZ::CVarFixedString, r_default_openxr_left_pipeline_name, "passes/XRLeftRenderPipeline.azasset", nullptr, AZ::ConsoleFunctorFlags::DontReplicate, "Default openXr Left eye render pipeline name");
-AZ_CVAR(AZ::CVarFixedString, r_default_openxr_right_pipeline_name, "passes/XRRightRenderPipeline.azasset", nullptr, AZ::ConsoleFunctorFlags::DontReplicate, "Default openXr Right eye render pipeline name");
 AZ_CVAR(uint32_t, r_width, 1920, cvar_r_resolution_Changed, AZ::ConsoleFunctorFlags::DontReplicate, "Starting window width in pixels.");
 AZ_CVAR(uint32_t, r_height, 1080, cvar_r_resolution_Changed, AZ::ConsoleFunctorFlags::DontReplicate, "Starting window height in pixels.");
 AZ_CVAR(uint32_t, r_fullscreen, false, nullptr, AZ::ConsoleFunctorFlags::DontReplicate, "Starting fullscreen state.");
@@ -606,8 +603,7 @@ namespace AZ
 
             bool BootstrapSystemComponent::EnsureDefaultRenderPipelineInstalledForScene(AZ::RPI::ScenePtr scene, AZ::RPI::ViewportContextPtr viewportContext)
             {
-                AZ::RPI::XRRenderingInterface* xrSystem = AZ::RPI::RPISystemInterface::Get()->GetXRSystem();
-                const bool loadDefaultRenderPipeline = !xrSystem || xrSystem->GetRHIXRRenderingInterface()->IsDefaultRenderPipelineNeeded();
+                const bool loadDefaultRenderPipeline = true;
 
                 AZ::RHI::MultisampleState multisampleState;
 
@@ -615,17 +611,6 @@ namespace AZ
                 if (loadDefaultRenderPipeline)
                 {
                     AZ::CVarFixedString pipelineName = static_cast<AZ::CVarFixedString>(r_renderPipelinePath);
-                    if (xrSystem)
-                    {
-                        // When running launcher on PC having an XR system present then the default render pipeline is suppose to reflect
-                        // what's being rendered into XR device. XR render pipeline uses multiview render pipeline.
-                        AZ::ApplicationTypeQuery appType;
-                        ComponentApplicationBus::Broadcast(&AZ::ComponentApplicationBus::Events::QueryApplicationType, appType);
-                        if (appType.IsGame())
-                        {
-                            pipelineName = r_default_openxr_pipeline_name;
-                        }
-                    }
 
                     RPI::RenderPipelinePtr renderPipeline = LoadPipeline(scene, viewportContext, pipelineName, AZ::RPI::ViewType::Default, multisampleState);
                     if (!renderPipeline)
@@ -641,25 +626,6 @@ namespace AZ
                 }
 
                 RunBRDFPipeline(scene, viewportContext);
-
-                // Load XR pipelines if applicable
-                if (xrSystem)
-                {
-                    for (AZ::u32 i = 0; i < xrSystem->GetNumViews(); i++)
-                    {
-                        const AZ::RPI::ViewType viewType = (i == 0)
-                            ? AZ::RPI::ViewType::XrLeft
-                            : AZ::RPI::ViewType::XrRight;
-                        const AZStd::string_view xrPipelineAssetName = (viewType == AZ::RPI::ViewType::XrLeft)
-                            ? static_cast<AZ::CVarFixedString>(r_default_openxr_left_pipeline_name)
-                            : static_cast<AZ::CVarFixedString>(r_default_openxr_right_pipeline_name);
-
-                        if (!LoadPipeline(scene, viewportContext, xrPipelineAssetName, viewType, multisampleState))
-                        {
-                            return false;
-                        }
-                    }
-                }
 
                 // Apply MSAA state to all the render pipelines.
                 // It's important to do this after all the pipelines have

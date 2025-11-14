@@ -88,7 +88,7 @@ namespace AZ
             bool GetExclusiveFullScreenState() const override;
             bool SetExclusiveFullScreenState(bool fullScreenState) override;
 
-            // Creates the underlying RHI level SwapChain for the given Window plus XR swapchains.
+            // Creates the underlying RHI level SwapChain for the given Window.
             void CreateSwapChains(RHI::Device& device);
 
             // Figure out swapchain's size based on window's client area size, render resolution and
@@ -101,9 +101,6 @@ namespace AZ
 
             // Destroys the underlying default SwapChain
             void DestroyDefaultSwapChain();
-
-            // Destroys the underlying XR SwapChains
-            void DestroyXRSwapChains();
 
             // Destroys swapChain data related to the provided index
             void DestroySwapChain(uint32_t swapChainIndex);
@@ -128,7 +125,7 @@ namespace AZ
                 // The default scissor that covers the entire surface
                 RHI::Scissor m_scissor;
             };
-            // Data structure to hold SwapChain for Default and XR SwapChains.
+            // Data structure to hold SwapChain for Default SwapChain.
             AZStd::vector<SwapChainData> m_swapChainsData;
 
             // The scaling mode used by the device swapchain.

@@ -60,7 +60,7 @@ namespace AZ
             //! Only applicable for ParentPass.
             //! If set to "true" then:
             //! 0- You may get performance benefits if the GPU is a Tiled Based Rasterizer and the RHI supports TBR (like Vulkan).
-            //!    This is typically the case for Mobile and XR platforms.
+            //!    This is typically the case for Mobile platforms.
             //! 1- All Child passes must be subclass of RenderPass and return true to CanBecomeSubpass().
             //! 2- The Child passes will be considered as mergeable into sequential subpasses.
             bool m_mergeChildrenAsSubpasses = false;

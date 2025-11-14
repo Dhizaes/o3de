@@ -11,11 +11,9 @@
 
 #include <Atom/RHI/PipelineStateDescriptor.h>
 #include <Atom/RHI/RHISystemInterface.h>
-#include <Atom/RHI/XRRenderingInterface.h>
 #include <Atom/RHI.Reflect/ClearValue.h>
 #include <Atom/RHI.Reflect/ImageScopeAttachmentDescriptor.h>
 #include <Atom/RHI.Reflect/ImagePoolDescriptor.h>
-#include <Atom/RHI.Reflect/Vulkan/XRVkDescriptors.h>
 #include <AzCore/std/algorithm.h>
 #include <AzCore/Component/ComponentApplicationBus.h>
 #include <AzCore/Console/ILogger.h>
@@ -36,8 +34,7 @@ namespace AZ
     {
         static bool IsDefaultSwapChainNeeded()
         {
-            auto* xrSystem = RHI::RHISystemInterface::Get()->GetXRSystem();
-            return !xrSystem || xrSystem->IsDefaultRenderPipelineNeeded();
+            return true;
         }
 
         RHI::Ptr<SwapChain> SwapChain::Create()
@@ -113,33 +110,23 @@ namespace AZ
             auto& device = static_cast<Device&>(GetDevice());
             m_dimensions = descriptor.m_dimensions;
 
-            if (descriptor.m_isXrSwapChain)
+            result = BuildSurface(descriptor);
+            RETURN_RESULT_IF_UNSUCCESSFUL(result);
+            
+            auto& presentationQueue = device.GetCommandQueueContext().GetOrCreatePresentationCommandQueue(*this);
+            m_presentationQueue = &presentationQueue;
+            
+            if (IsDefaultSwapChainNeeded())
             {
-                if (nativeDimensions)
-                {
-                    *nativeDimensions = m_dimensions;
-                }
-            }
-            else
-            {
-                result = BuildSurface(descriptor);
+                result = CreateSwapchain();
                 RETURN_RESULT_IF_UNSUCCESSFUL(result);
-
-                auto& presentationQueue = device.GetCommandQueueContext().GetOrCreatePresentationCommandQueue(*this);
-                m_presentationQueue = &presentationQueue;
-
-                if (IsDefaultSwapChainNeeded())
-                {
-                    result = CreateSwapchain();
-                    RETURN_RESULT_IF_UNSUCCESSFUL(result);
-                }
-
-                if (nativeDimensions)
-                {
-                    // Fill out the real swapchain dimensions to return
-                    *nativeDimensions = m_dimensions;
-                    nativeDimensions->m_imageFormat = ConvertFormat(m_surfaceFormat.format);
-                }
+            }
+            
+            if (nativeDimensions)
+            {
+                // Fill out the real swapchain dimensions to return
+                *nativeDimensions = m_dimensions;
+                nativeDimensions->m_imageFormat = ConvertFormat(m_surfaceFormat.format);
             }
 
             SetName(GetName());
@@ -148,12 +135,6 @@ namespace AZ
 
         void SwapChain::ShutdownInternal()
         {
-            //Nothing to clean as all the native objects for xr swapchain is handles by xr modules
-            if (GetDescriptor().m_isXrSwapChain)
-            {
-                return;
-            }
-
             InvalidateNativeSwapChain(m_nativeSwapChain);
             m_nativeSwapChain = VK_NULL_HANDLE;
             InvalidateSurface();
@@ -170,26 +151,11 @@ namespace AZ
             RHI::ImageDescriptor imageDesc = request.m_descriptor;
             RHI::ResultCode result = RHI::ResultCode::Success;
 
-            // XR swapchains will retrieve the native swapchain image from xr system where as non-xr
-            // swapchains will use the images created internally (i.e RHI::Vulkan)
-            if (GetDescriptor().m_isXrSwapChain)
+            // Swapchains will use the images created internally (i.e RHI::Vulkan)
+            if (IsDefaultSwapChainNeeded())
             {
-                XRSwapChainDescriptor xrSwapChainDescriptor;
-                xrSwapChainDescriptor.m_inputData.m_swapChainIndex = GetDescriptor().m_xrSwapChainIndex;
-                xrSwapChainDescriptor.m_inputData.m_swapChainImageIndex = request.m_imageIndex;
-
-                result = GetXRSystem()->GetSwapChainImage(&xrSwapChainDescriptor);
-                AZ_Assert(result == RHI::ResultCode::Success, "Xr Session creation was not successful");
-
-                result = image->Init(device, xrSwapChainDescriptor.m_outputData.m_nativeImage, imageDesc);
-            }
-            else
-            {
-                if (IsDefaultSwapChainNeeded())
-                {
-                    imageDesc.m_format = ConvertFormat(m_surfaceFormat.format);
-                    result = image->Init(device, m_swapchainNativeImages[request.m_imageIndex], imageDesc);
-                }
+                imageDesc.m_format = ConvertFormat(m_surfaceFormat.format);
+                result = image->Init(device, m_swapchainNativeImages[request.m_imageIndex], imageDesc);
             }
 
             if (result != RHI::ResultCode::Success)
@@ -234,12 +200,6 @@ namespace AZ
 
         uint32_t SwapChain::PresentInternal()
         {
-            // No need to present a xr swapchain
-            if (GetDescriptor().m_isXrSwapChain)
-            {
-                return 0;
-            }
-
             auto& device = static_cast<Device&>(GetDevice());
 
             const uint32_t imageIndex = GetCurrentImageIndex();

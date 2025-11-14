@@ -14,7 +14,6 @@
 #include <Atom/RHI.Reflect/FrameSchedulerEnums.h>
 #include <Atom/RHI.Reflect/MemoryStatistics.h>
 #include <Atom/RHI/DrawListTagRegistry.h>
-#include <Atom/RHI/XRRenderingInterface.h>
 
 #if defined(AZ_MONOLITHIC_BUILD)
 AZ_DECLARE_BUDGET(RHI);
@@ -73,8 +72,6 @@ namespace AZ::RHI
         virtual ConstPtr<PlatformLimitsDescriptor> GetPlatformLimitsDescriptor(int deviceIndex = MultiDevice::DefaultDeviceIndex) const = 0;
 
         virtual void QueueRayTracingShaderTableForBuild(DeviceRayTracingShaderTable* rayTracingShaderTable) = 0;
-            
-        virtual XRRenderingInterface* GetXRSystem() const = 0;
 
         virtual void SetDrawListTagEnabledByDefault(DrawListTag drawListTag, bool enabled) = 0;
 

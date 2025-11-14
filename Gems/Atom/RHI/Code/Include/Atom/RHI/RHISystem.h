@@ -14,7 +14,6 @@
 #include <Atom/RHI/PipelineStateCache.h>
 #include <Atom/RHI/RHISystemInterface.h>
 #include <Atom/RHI/RHIMemoryStatisticsInterface.h>
-#include <Atom/RHI/XRRenderingInterface.h>
 
 namespace AZ
 {
@@ -53,10 +52,6 @@ namespace AZ::RHI
         //! Invokes the frame scheduler. The provided callback is invoked prior to compilation of the graph.
         void FrameUpdate(FrameGraphCallback frameGraphCallback);
 
-        //! Register/Unregister xr system
-        bool RegisterXRSystem(XRRenderingInterface* xrRenderingInterface);
-        void UnregisterXRSystem();
-
         //! Get/Set functions for the number of active pipelines in use in a frame 
         void SetNumActiveRenderPipelines(uint16_t numActiveRenderPipelines);
         uint16_t GetNumActiveRenderPipelines() const override;
@@ -76,7 +71,6 @@ namespace AZ::RHI
         const AZStd::unordered_map<int, TransientAttachmentPoolDescriptor>* GetTransientAttachmentPoolDescriptor() const override;
         ConstPtr<PlatformLimitsDescriptor> GetPlatformLimitsDescriptor(int deviceIndex = MultiDevice::DefaultDeviceIndex) const override;
         void QueueRayTracingShaderTableForBuild(DeviceRayTracingShaderTable* rayTracingShaderTable) override;
-        XRRenderingInterface* GetXRSystem() const override;
         void SetDrawListTagEnabledByDefault(DrawListTag drawListTag, bool enabled) override;
         const AZStd::vector<DrawListTag>& GetDrawListTagsDisabledByDefault() const override;
         bool GpuMarkersEnabled() const override;
@@ -109,7 +103,6 @@ namespace AZ::RHI
         RHI::FrameSchedulerCompileRequest m_compileRequest;
         RHI::Ptr<RHI::DrawListTagRegistry> m_drawListTagRegistry;
         RHI::Ptr<RHI::PipelineStateCache> m_pipelineStateCache;
-        XRRenderingInterface* m_xrSystem = nullptr;
 
         //Used for better verbosity related to gpu markers
         uint16_t m_numActiveRenderPipelines = 0;

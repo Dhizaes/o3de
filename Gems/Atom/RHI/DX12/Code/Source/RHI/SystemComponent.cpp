@@ -97,12 +97,6 @@ namespace AZ
             return RHI::APIMiddlePriority;
         }
 
-        bool SystemComponent::SupportsXR() const
-        {
-            //DX12 RHI does not support XR api
-            return false;
-        }
-
         RHI::PhysicalDeviceList SystemComponent::EnumeratePhysicalDevices()
         {
             return PhysicalDevice::Enumerate();

@@ -19,7 +19,6 @@
 #include <Atom/RHI/RHISystemInterface.h>
 #include <Atom/RPI.Public/RPISystem.h>
 #include <Atom/RPI.Public/GpuQuery/GpuPassProfiler.h>
-#include <Atom/RPI.Public/XR/XRRenderingInterface.h>
 
 #include "PerformanceCVarManager.h"
 
@@ -40,7 +39,6 @@ namespace AZ
             : public AZ::Component
             , public AZ::SystemTickBus::Handler
             , public AZ::RHI::RHISystemNotificationBus::Handler
-            , public XRRegisterInterface::Registrar
             , public PerformanceCollectorOwner::Registrar
         {
         public:
@@ -56,12 +54,6 @@ namespace AZ
 
             void Activate() override;
             void Deactivate() override;
-
-            ///////////////////////////////////////////////////////////////////
-            // IXRRegisterInterface overrides
-            void RegisterXRInterface(XRRenderingInterface* xrSystemInterface) override;
-            void UnRegisterXRInterface() override;
-            ///////////////////////////////////////////////////////////////////
 
         private:
             RPISystemComponent(const RPISystemComponent&) = delete;

@@ -120,9 +120,6 @@ namespace AZ
             //! Sets the viewToClip exclusion matrix. This is used by culling to exclude items completely contained inside
             //! the exclusion frustum. Pass in nullptr to unset.
             void SetViewToClipExcludeMatrix(const AZ::Matrix4x4* viewToClipExclude);
-            
-            //! Sets the viewToClip matrix and recalculates the other matrices for stereoscopic projection
-            void SetStereoscopicViewToClipMatrix(const AZ::Matrix4x4& viewToClip, bool reverseDepth = true);
 
             //! Sets a pixel offset on the view, usually used for jittering the camera for anti-aliasing techniques.
             void SetClipSpaceOffset(float xOffset, float yOffset);

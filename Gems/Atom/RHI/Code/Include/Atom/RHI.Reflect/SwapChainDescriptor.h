@@ -59,13 +59,6 @@ namespace AZ::RHI
         // ID for the SwapChain's attachment.
         RHI::AttachmentId m_attachmentId;
 
-        // Dictates if it is a XR swapchain.
-        bool m_isXrSwapChain = false;
-
-        // Return the index of a XR swapchain
-        // as you can have multiple XR swapchains (one per view).
-        uint32_t m_xrSwapChainIndex = 0;
-
         // The scaling mode to use when presenting the swapchain's back buffer to the target
         // Note: not all platforms support stretch or stretch with aspect ratio.
         // Use DeviceFeature::m_swapChainScalingFlags to find out supported stretch modes

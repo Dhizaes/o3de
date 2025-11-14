@@ -487,16 +487,6 @@ namespace AZ
             }
         }
 
-        void RenderPipeline::SetDefaultStereoscopicViewFromEntity(EntityId entityId, RPI::ViewType viewType)
-        {
-            ViewPtr cameraView;
-            ViewProviderBus::EventResult(cameraView, entityId, &ViewProvider::GetStereoscopicView, viewType);
-            if (cameraView)
-            {
-                SetDefaultView(cameraView);
-            }
-        }
-
         void RenderPipeline::AddTransientView(const PipelineViewTag& viewTag, ViewPtr view)
         {
             AZ_Assert(view, "Transient View for ViewTag [%s] is invalid.", viewTag.GetCStr());

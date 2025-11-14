@@ -154,33 +154,8 @@ namespace AZ
                 }
             };
 
-            if (auto* xrSystem = AZ::RPI::RPISystemInterface::Get()->GetXRSystem())
-            {
-                // Check wheter to render default pipeline on host or not.
-                if (xrSystem->GetRHIXRRenderingInterface()->IsDefaultRenderPipelineNeeded())
-                {
-                    if (xrSystem->GetRHIXRRenderingInterface()->IsDefaultRenderPipelineEnabledOnHost())
-                    {
-                        renderPipelineOnce(m_currentPipelines[static_cast<size_t>(AZ::RPI::ViewType::Default)]);
-                    }
-                    else
-                    {
-                        stopRenderingPipeline(m_currentPipelines[static_cast<size_t>(AZ::RPI::ViewType::Default)]);
-                    }
-                }
-
-                // Render XR pipelines
-                for (AZ::u32 i = 0; i < xrSystem->GetNumViews(); i++)
-                {
-                    const AZ::RPI::ViewType viewType = (i == 0) ? AZ::RPI::ViewType::XrLeft : AZ::RPI::ViewType::XrRight;
-                    renderPipelineOnce(m_currentPipelines[static_cast<size_t>(viewType)]);
-                }
-            }
-            else
-            {
-                // Render default pipeline
-                renderPipelineOnce(m_currentPipelines[static_cast<size_t>(AZ::RPI::ViewType::Default)]);
-            }
+            // Render default pipeline
+            renderPipelineOnce(m_currentPipelines[static_cast<size_t>(AZ::RPI::ViewType::Default)]);
         }
 
         void ViewportContext::OnBeginPrepareRender()
@@ -220,16 +195,6 @@ namespace AZ
         ConstViewPtr ViewportContext::GetDefaultView() const
         {
             return m_viewGroup->GetView();
-        }
-
-        ViewPtr ViewportContext::GetStereoscopicView(AZ::RPI::ViewType viewType)
-        {
-            return m_viewGroup->GetView(viewType);
-        }
-
-        ConstViewPtr ViewportContext::GetStereoscopicView(AZ::RPI::ViewType viewType) const
-        {
-            return m_viewGroup->GetView(viewType);
         }
 
         AzFramework::WindowSize ViewportContext::GetViewportSize() const

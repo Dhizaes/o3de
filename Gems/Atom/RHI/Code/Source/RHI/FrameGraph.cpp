@@ -702,20 +702,6 @@ namespace AZ::RHI
         //////////////////////////////////////////////////////////////////
         // This additional sort makes sure that scopes in the same group get grouped consecutively.
         // This is necessary when using subpasses.
-        // This is an example on how a Multiview(aka XR) scenario would sort scopes WITHOUT
-        // this sort:
-        //     [0] "Root"
-        //     [1] "XRLeftPipeline_-10.MultiViewForwardPass"
-        //     [2] "XRRightPipeline_-10.MultiViewForwardPass"
-        //     [3] "XRRightPipeline_-10.MultiViewSkyBoxPass"
-        //     [4] "XRLeftPipeline_-10.MultiViewSkyBoxPass"
-        // The RHI would crash because the subpasses in the LEFT View are not consecutive.
-        // On the other hand, thanks to this sort the order would end like this:
-        //     [0] "Root"
-        //     [1] "XRLeftPipeline_-10.MultiViewForwardPass"
-        //     [2] "XRLeftPipeline_-10.MultiViewSkyBoxPass" 
-        //     [3] "XRRightPipeline_-10.MultiViewForwardPass"
-        //     [4] "XRRightPipeline_-10.MultiViewSkyBoxPass"
         AZStd::stable_sort(
             preSortScopes.begin(),
             preSortScopes.end(),

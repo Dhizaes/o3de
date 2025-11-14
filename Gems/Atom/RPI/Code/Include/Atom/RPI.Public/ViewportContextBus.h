@@ -78,12 +78,12 @@ namespace AZ
             //! Enumerates all registered ViewportContexts, calling visitorFunction once for each registered viewport.
             virtual void EnumerateViewportContexts(AZStd::function<void(ViewportContextPtr)> visitorFunction) = 0;
 
-            //! Pushes a view group to the stack for a given context name. A view group manages all stereoscopic and non-stereoscopic views.
+            //! Pushes a view group to the stack for a given context name. A view group manages all views.
             //! The Views within a View Group must be declared a camera by having the View::UsageFlags::UsageCamera usage flag set.
             //! This View Group will be registered as the context's pipeline's default view group until the top of the camera stack changes.
             virtual void PushViewGroup(const Name& contextName, ViewGroupPtr viewGroup) = 0;
 
-            //! Pops a view group off the stack for a given context name. A view group manages all stereoscopic and non-stereoscopic views.
+            //! Pops a view group off the stack for a given context name. A view group manages all views.
             //! Returns true if the camera was successfully removed or false if the view wasn't removed,
             //! either because it wasn't found within any existing view groups or its removal was not allowed.
             //! @note The default camera's view group for a given viewport may not be removed from the view stack.

@@ -116,8 +116,6 @@ set(FILES
     Include/Atom/RPI.Public/GpuQuery/QueryPool.h
     Include/Atom/RPI.Public/GpuQuery/TimestampQueryPool.h
     Include/Atom/RPI.Public/GpuQuery/GpuPassProfiler.h
-    Include/Atom/RPI.Public/XR/XRRenderingInterface.h
-    Include/Atom/RPI.Public/XR/XRSpaceNotificationBus.h
     Include/Atom/RPI.Public/PerformanceCollectionNotificationBus.h
     Source/RPI.Public/Culling.cpp
     Source/RPI.Public/DllMain.cpp

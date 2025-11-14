@@ -304,21 +304,6 @@ namespace AZ
             return {};
         }
 
-        ViewPtr ViewportContextManager::GetCurrentStereoscopicView(const Name& context, ViewType viewType)
-        {
-            AZStd::lock_guard lock(m_containerMutex);
-
-            if (auto viewIt = m_viewportViews.find(context); viewIt != m_viewportViews.end())
-            {
-                uint32_t xrViewIndex = static_cast<uint32_t>(viewType);
-                if (xrViewIndex < viewIt->second.back()->GetNumViews())
-                {
-                    return viewIt->second.back()->GetView(static_cast<ViewType>(xrViewIndex));
-                }      
-            }
-            return {};
-        }
-
         ViewportContextManager::ViewPtrStack& ViewportContextManager::GetOrCreateViewStackForContext(const Name& context)
         {
             // If a stack doesn't already exist, create one now to populate it
@@ -329,7 +314,6 @@ namespace AZ
                 ViewGroupPtr defaultViewGroup = AZStd::make_shared<ViewGroup>();
                 defaultViewGroup->Init(ViewGroup::Descriptor{ nullptr, nullptr });
                 defaultViewGroup->CreateMainView(defaultViewName);
-                defaultViewGroup->CreateStereoscopicViews(defaultViewName);
                 viewStack.push_back(defaultViewGroup);
             }
             return viewStack;

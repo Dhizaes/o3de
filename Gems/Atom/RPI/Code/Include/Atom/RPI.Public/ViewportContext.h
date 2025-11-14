@@ -72,11 +72,6 @@ namespace AZ
             ViewPtr GetDefaultView();
             ConstViewPtr GetDefaultView() const;
 
-            //! Gets the stereoscopic view associated with this ViewportContext.
-            //! Alternatively, use AZ::RPI::ViewportContextRequests::Get()->GetCurrentViewGroup()->GetView(AZ::RPI::ViewType).
-            ViewPtr GetStereoscopicView(AZ::RPI::ViewType viewType);
-            ConstViewPtr GetStereoscopicView(AZ::RPI::ViewType viewType) const;
-
             //! Gets the current size of the viewport.
             //! This value is cached and updated on-demand, so may be efficiently queried.
             AzFramework::WindowSize GetViewportSize() const;

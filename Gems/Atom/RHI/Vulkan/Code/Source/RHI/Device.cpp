@@ -10,7 +10,6 @@
 #include <Atom/RHI.Reflect/Vulkan/Conversion.h>
 #include <Atom/RHI.Reflect/Vulkan/PlatformLimitsDescriptor.h>
 #include <Atom/RHI.Reflect/Vulkan/VulkanBus.h>
-#include <Atom/RHI.Reflect/Vulkan/XRVkDescriptors.h>
 #include <Atom/RHI/DeviceTransientAttachmentPool.h>
 #include <Atom/RHI/Factory.h>
 #include <Atom/RHI/RHIMemoryStatisticsInterface.h>
@@ -788,42 +787,11 @@ namespace AZ
             m_releaseQueue.Collect();
             m_commandQueueContext.Begin();
 
-            RHI::XRRenderingInterface* xrSystem = RHI::RHISystemInterface::Get()->GetXRSystem();
-            if (xrSystem)
-            {
-                // Begin Frame can make XR related calls which we need to make sure happens
-                // from the thread related to the presentation queue or drivers will complain
-                auto& presentationQueue = m_commandQueueContext.GetPresentationCommandQueue();
-                auto presentCommand = [xrSystem](void*)
-                {
-                    xrSystem->BeginFrame();
-                };
-
-                presentationQueue.QueueCommand(AZStd::move(presentCommand));
-                presentationQueue.FlushCommands();
-            }
             return RHI::ResultCode::Success;
         }
 
         void Device::EndFrameInternal()
         {
-            RHI::XRRenderingInterface* xrSystem = RHI::RHISystemInterface::Get()->GetXRSystem();
-            if (xrSystem)
-            {
-                // End Frame can make XR related calls which we need to make sure happens
-                // from the thread related to the presentation queue or drivers will complain
-                auto& presentationQueue = m_commandQueueContext.GetPresentationCommandQueue();
-                auto presentCommand = [xrSystem](void*)
-                {
-                    xrSystem->EndFrame();
-                };
-
-                presentationQueue.QueueCommand(AZStd::move(presentCommand));
-                presentationQueue.FlushCommands();
-
-                xrSystem->PostFrame();
-            }
-
             m_commandQueueContext.End();
             m_commandListAllocator.Collect();
             m_semaphoreAllocator.Collect();
@@ -1212,21 +1180,6 @@ namespace AZ
             return RHI::ShadingRateImageValue{};
         }
 
-        RHI::Ptr<RHI::XRDeviceDescriptor> Device::BuildXRDescriptor() const
-        {
-            XRDeviceDescriptor* xrDeviceDescriptor = aznew XRDeviceDescriptor;
-            xrDeviceDescriptor->m_inputData.m_xrVkDevice = m_nativeDevice;
-            xrDeviceDescriptor->m_inputData.m_xrVkPhysicalDevice = static_cast<const PhysicalDevice&>(GetPhysicalDevice()).GetNativePhysicalDevice();
-            for (int i = 0; i < RHI::HardwareQueueClassCount; ++i)
-            {
-                const auto& queueDescriptor =
-                    m_commandQueueContext.GetCommandQueue(static_cast<RHI::HardwareQueueClass>(i)).GetQueueDescriptor();
-                xrDeviceDescriptor->m_inputData.m_xrQueueBinding[i].m_queueFamilyIndex = queueDescriptor.m_familyIndex;
-                xrDeviceDescriptor->m_inputData.m_xrQueueBinding[i].m_queueIndex = queueDescriptor.m_queueIndex;
-            }
-            return xrDeviceDescriptor;
-        }
-
         void Device::InitFeaturesAndLimits(const PhysicalDevice& physicalDevice)
         {
             m_features.m_geometryShader = (m_enabledDeviceFeatures.geometryShader == VK_TRUE);
@@ -1353,12 +1306,8 @@ namespace AZ
                 }
             }
             m_features.m_swapchainScalingFlags = AZ_TRAIT_ATOM_VULKAN_SWAPCHAIN_SCALING_FLAGS;
-
-#ifdef DISABLE_TIMELINE_SEMAPHORES
-            m_features.m_signalFenceFromCPU = false;
-#else
             m_features.m_signalFenceFromCPU = physicalDevice.GetPhysicalDeviceTimelineSemaphoreFeatures().timelineSemaphore;
-#endif
+
             // These are two nested ifs instead of one because MSVC complains about a missing contexpr otherwise
             // The warning is C4127, but we can't add a constexpr when doing (constexpr && non-constexpr)
             // The two ifs can be combined into a single one once MSVC fixes this warning

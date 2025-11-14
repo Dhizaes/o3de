@@ -50,7 +50,7 @@ namespace AZ::Render
     {
         const auto templateName = Name(MainPassParentTemplateName);
 
-        // Early return if pass is already found in render pipeline or if the pipeline is not the default one (i.e it is an XR pipeline).
+        // Early return if pass is already found in render pipeline or if the pipeline is not the default one.
         auto passFilter = AZ::RPI::PassFilter::CreateWithTemplateName(templateName, renderPipeline);
         auto foundPass = AZ::RPI::PassSystemInterface::Get()->FindFirstPass(passFilter);
         if (foundPass || renderPipeline->GetViewType() != RPI::ViewType::Default)

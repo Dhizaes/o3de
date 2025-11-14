@@ -11,14 +11,13 @@
 #include <Atom/RPI.Public/Configuration.h>
 #include <Atom/RPI.Public/View.h>
 #include <Atom/RPI.Public/ViewProviderBus.h>
-#include <Atom/RPI.Public/XR/XRRenderingInterface.h>
 #include <AzCore/Name/Name.h>
 
 namespace AZ
 {
     namespace RPI
     {
-        //! This class is responsible for managing stereoscopic and non-stereoscopic views.
+        //! This class is responsible for managing views.
         //! It also allows calling code to provide handlers or functions to be called in case the projection
         //! or view matrix changes. 
         class ATOM_RPI_PUBLIC_API ViewGroup final
@@ -51,14 +50,11 @@ namespace AZ
                 MatrixChangedEvent m_viewMatrixChangedEvent;
             };
 
-            //! Initialization which involves caching the descriptor and XR system related properties if applicable.
+            //! Initialization which involves caching the descriptor if applicable.
             void Init(const Descriptor& desc);
 
-            //! Create the main non-stereoscopic view.
+            //! Create the main view.
             void CreateMainView(AZ::Name name);
-
-            //! Create all stereoscopic views.
-            void CreateStereoscopicViews(AZ::Name name);
 
             //! Activate this view group which involves connecting the handlers to the views.
             void Activate();
@@ -74,9 +70,6 @@ namespace AZ
 
             //! Set the projection transform for the view associated with a view type.
             void SetViewToClipMatrix(const AZ::Matrix4x4& viewToClipMatrix, ViewType viewType = ViewType::Default);
-
-            //! Set the stereoscopic projection transform for the view associated with a view type.
-            void SetStereoscopicViewToClipMatrix(const AZ::Matrix4x4& viewToClipMatrix, bool reverseDepth = true, ViewType viewType= ViewType::Default);
 
             //! Allow calling code to connect a handler to an event that is signaled when the view transform is updated.
             void ConnectViewMatrixChangedEvent(MatrixChangedEvent::Handler& handler, ViewType viewType = ViewType::Default);
@@ -122,12 +115,6 @@ namespace AZ
 
             //! Vector to all the view data
             AZStd::array<ViewData, MaxViewTypes> m_cameraViews;
-
-            //! XRRendering interface
-            AZ::RPI::XRRenderingInterface* m_xrSystem = nullptr;
-
-            //! Number of stereoscopic views
-            AZ::u32 m_numSterescopicViews = 0;
 
             Descriptor m_desc;
         };

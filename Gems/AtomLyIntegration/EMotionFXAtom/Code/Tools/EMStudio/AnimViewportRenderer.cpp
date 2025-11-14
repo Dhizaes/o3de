@@ -75,12 +75,6 @@ namespace EMStudio
         m_frameworkScene->SetSubsystem(m_scene);
 
         AZStd::string pipelineAssetPath = "passes/MainRenderPipeline.azasset";
-        AZ::RPI::XRRenderingInterface* xrSystem = AZ::RPI::RPISystemInterface::Get()->GetXRSystem();
-        if (xrSystem)
-        {
-            // OpenXr uses low end render pipeline
-            pipelineAssetPath = "passes/LowEndRenderPipeline.azasset";
-        }
 
         AZStd::optional<AZ::RPI::RenderPipelineDescriptor> renderPipelineDesc =
             AZ::RPI::GetRenderPipelineDescriptorFromAsset(pipelineAssetPath.c_str(), AZStd::string::format("_%i", viewportContext->GetId()));

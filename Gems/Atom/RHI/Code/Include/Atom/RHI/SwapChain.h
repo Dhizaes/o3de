@@ -10,7 +10,6 @@
 #include <Atom/RHI.Reflect/SwapChainDescriptor.h>
 #include <Atom/RHI/ImagePoolBase.h>
 #include <Atom/RHI/DeviceSwapChain.h>
-#include <Atom/RHI/XRRenderingInterface.h>
 
 namespace AZ::RHI
 {
@@ -108,9 +107,6 @@ namespace AZ::RHI
         //! Initialized all the images.
         ResultCode InitImages();
 
-        //! Return the xr system interface
-        RHI::XRRenderingInterface* GetXRSystem() const;
-
         //! Flag indicating if swapchain recreation is needed at the end of the frame.
         bool m_pendingRecreation = false;
 
@@ -121,8 +117,5 @@ namespace AZ::RHI
 
         //! Images corresponding to each image in the swap chain.
         AZStd::vector<Ptr<Image>> m_images;
-
-        //! Cache the XR system at initialization time
-        RHI::XRRenderingInterface* m_xrSystem = nullptr;
     };
 } // namespace AZ::RHI

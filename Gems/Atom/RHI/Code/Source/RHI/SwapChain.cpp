@@ -36,12 +36,6 @@ namespace AZ::RHI
             return ResultCode::InvalidArgument;
         }
 
-        if (descriptor.m_isXrSwapChain)
-        {
-            m_xrSystem = RHI::RHISystemInterface::Get()->GetXRSystem();
-            AZ_Assert(m_xrSystem, "XR System is null");
-        }
-
         MultiDevice::DeviceMask deviceMask{ 1u << deviceIndex };
 
         SwapChainDimensions nativeDimensions = descriptor.m_dimensions;
@@ -266,14 +260,6 @@ namespace AZ::RHI
 
     Image* SwapChain::GetCurrentImage() const
     {
-        if (m_descriptor.m_isXrSwapChain)
-        {
-#if defined (AZ_FORCE_CPU_GPU_INSYNC)
-            return m_images[0].get();
-#else
-            return m_images[m_xrSystem->GetCurrentImageIndex(m_descriptor.m_xrSwapChainIndex)].get();
-#endif
-        }
         AZ_Error("Swapchain", !m_deviceObjects.empty(), "No device swapchain image available.");
         // Note: Taking the current swapchain image index from the first device swap chain if there are multiple
         auto currentImageIndex{ AZStd::static_pointer_cast<DeviceSwapChain>(m_deviceObjects.begin()->second)->GetCurrentImageIndex() };
@@ -291,11 +277,6 @@ namespace AZ::RHI
         {
             deviceSwapChain->Present();
         });
-    }
-
-    RHI::XRRenderingInterface* SwapChain::GetXRSystem() const
-    {
-        return m_xrSystem;
     }
 
     void SwapChain::Shutdown()

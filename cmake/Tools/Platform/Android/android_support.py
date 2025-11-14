@@ -870,9 +870,6 @@ class AndroidProjectGenerator(object):
             if self.override_ninja_path:
                 cmake_argument_list.append(f'"-DCMAKE_MAKE_PROGRAM={common.normalize_path_for_settings(self.override_ninja_path)}"')
 
-            if self.oculus_project:
-                cmake_argument_list.append('"-DANDROID_USE_OCULUS_OPENXR=ON"')
-
             if self.extra_cmake_configure_args:
                 cmake_argument_list.extend(map(json.dumps, self.extra_cmake_configure_args))
 

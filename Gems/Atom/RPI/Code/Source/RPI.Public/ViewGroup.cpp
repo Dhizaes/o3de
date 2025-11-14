@@ -16,16 +16,6 @@ namespace AZ::RPI
     {
         m_desc = desc;
 
-        if (auto rpiSystemInterface = RPISystemInterface::Get())
-        {
-            m_xrSystem = rpiSystemInterface->GetXRSystem();
-            if (m_xrSystem)
-            {
-                m_numSterescopicViews = m_xrSystem->GetNumViews();
-                AZ_Assert(m_numSterescopicViews <= XRMaxNumViews, "Atom only supports two XR views");
-            }
-        }
-
         for (int i = 0; i < MaxViewTypes; i++)
         {
             m_cameraViews[i].m_onProjectionMatrixChangedHandler = MatrixChangedEvent::Handler(
@@ -61,24 +51,6 @@ namespace AZ::RPI
         if (m_cameraViews[DefaultViewType].m_view == nullptr)
         {
             m_cameraViews[DefaultViewType].m_view = AZ::RPI::View::CreateView(name, AZ::RPI::View::UsageFlags::UsageCamera);
-        }
-    }
-
-    void ViewGroup::CreateStereoscopicViews(AZ::Name name)
-    {
-        if (m_xrSystem)
-        {
-            for (AZ::u32 i = 0; i < m_numSterescopicViews; i++)
-            {
-                uint32_t xrViewIndex =
-                    i == 0 ? static_cast<uint32_t>(AZ::RPI::ViewType::XrLeft) : static_cast<uint32_t>(AZ::RPI::ViewType::XrRight);
-                if (m_cameraViews[xrViewIndex].m_view == nullptr)
-                {
-                    AZ::Name xrViewName = AZ::Name(AZStd::string::format("%s XR %i", name.GetCStr(), i));
-                    m_cameraViews[xrViewIndex].m_view =
-                        AZ::RPI::View::CreateView(xrViewName, AZ::RPI::View::UsageCamera | AZ::RPI::View::UsageXR);
-                }
-            }
         }
     }
 
@@ -141,15 +113,6 @@ namespace AZ::RPI
         if (m_cameraViews[viewIndex].m_view)
         {
             m_cameraViews[viewIndex].m_view->SetViewToClipMatrix(viewToClipMatrix);
-        }
-    }
-
-    void ViewGroup::SetStereoscopicViewToClipMatrix(const AZ::Matrix4x4& viewToClipMatrix, bool reverseDepth, ViewType viewType)
-    {
-        uint32_t viewIndex = GetViewIndex(viewType);
-        if (m_cameraViews[viewIndex].m_view)
-        {
-            m_cameraViews[viewIndex].m_view->SetStereoscopicViewToClipMatrix(viewToClipMatrix, reverseDepth);
         }
     }
 

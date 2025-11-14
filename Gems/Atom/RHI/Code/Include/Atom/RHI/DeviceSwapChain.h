@@ -9,7 +9,6 @@
 
 #include <Atom/RHI.Reflect/SwapChainDescriptor.h>
 #include <Atom/RHI/DeviceImagePoolBase.h>
-#include <Atom/RHI/XRRenderingInterface.h>
 
 #include <AzCore/Console/IConsole.h>
 AZ_CVAR_API_EXTERNED(ATOM_RHI_PUBLIC_API, bool, r_hdrOutput);
@@ -112,9 +111,6 @@ namespace AZ::RHI
         //! Initialized all the images.
         ResultCode InitImages();
 
-        //! Return the xr system interface
-        RHI::XRRenderingInterface* GetXRSystem() const;
-
         //! Flag indicating if swapchain recreation is needed at the end of the frame.
         bool m_pendingRecreation = false;
     private:
@@ -148,8 +144,5 @@ namespace AZ::RHI
 
         //! The current image index.
         uint32_t m_currentImageIndex = 0;
-
-        //! Cache the XR system at initialization time
-        RHI::XRRenderingInterface* m_xrSystem = nullptr;
     };
 }

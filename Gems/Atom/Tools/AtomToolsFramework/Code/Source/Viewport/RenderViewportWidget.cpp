@@ -77,7 +77,6 @@ namespace AtomToolsFramework
         m_defaultCameraGroup = AZStd::make_shared<AZ::RPI::ViewGroup>();
         m_defaultCameraGroup->Init(AZ::RPI::ViewGroup::Descriptor{ nullptr, nullptr });
         m_defaultCameraGroup->CreateMainView(cameraName);
-        m_defaultCameraGroup->CreateStereoscopicViews(cameraName);
         AZ::Interface<AZ::RPI::ViewportContextRequestsInterface>::Get()->PushViewGroup(m_viewportContext->GetName(), m_defaultCameraGroup);
 
         m_viewportInteractionImpl = AZStd::make_unique<ViewportInteractionImpl>(GetDefaultCamera());

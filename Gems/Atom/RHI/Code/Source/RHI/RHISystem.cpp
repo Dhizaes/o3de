@@ -406,28 +406,6 @@ namespace AZ::RHI
         m_frameScheduler.QueueRayTracingShaderTableForBuild(rayTracingShaderTable);
     }
 
-    bool RHISystem::RegisterXRSystem(XRRenderingInterface* xrRenderingInterface)
-    {
-        AZ_Assert(!m_xrSystem, "XR System is already registered");
-        if (RHI::Factory::Get().SupportsXR())
-        {
-            m_xrSystem = xrRenderingInterface;
-            return true;
-        }
-        return false;
-    }
-
-    void RHISystem::UnregisterXRSystem()
-    {
-        AZ_Assert(m_xrSystem, "XR System is already null");
-        m_xrSystem = nullptr;
-    }
-
-    RHI::XRRenderingInterface* RHISystem::GetXRSystem() const
-    {
-        return m_xrSystem;
-    }
-
     void RHISystem::SetDrawListTagEnabledByDefault(DrawListTag drawListTag, bool enabled)
     {
         if (enabled)

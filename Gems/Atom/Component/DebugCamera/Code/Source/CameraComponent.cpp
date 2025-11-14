@@ -81,25 +81,6 @@ namespace AZ
                 AZ::Name("Camera view (unknown entity)");
 
             m_cameraView->CreateMainView(viewName);
-            m_cameraView->CreateStereoscopicViews(viewName);
-
-            m_xrSystem = RPI::RPISystemInterface::Get()->GetXRSystem();
-            if (m_xrSystem)
-            {
-                m_numXrViews = m_xrSystem->GetNumViews();
-            }
-
-            for (uint16_t i = 0; i < AZ::RPI::XRMaxNumViews; i++)
-            {
-                if (i < m_stereoscopicViewQuats.size())
-                {
-                    m_stereoscopicViewQuats[i] = AZ::Quaternion::CreateIdentity();
-                }
-                else
-                {
-                    m_stereoscopicViewQuats.insert(m_stereoscopicViewQuats.begin() + i, AZ::Quaternion::CreateIdentity());
-                }
-            }
 
             m_auxGeomFeatureProcessor = RPI::Scene::GetFeatureProcessorForEntity<RPI::AuxGeomFeatureProcessorInterface>(GetEntityId());
             if (m_auxGeomFeatureProcessor)
@@ -133,18 +114,11 @@ namespace AZ
             }
             
             m_auxGeomFeatureProcessor = nullptr;
-            m_stereoscopicViewQuats.clear();
         }
 
         RPI::ViewPtr CameraComponent::GetView() const
         {
             return m_cameraView->GetView(RPI::ViewType::Default);
-        }
-
-        RPI::ViewPtr CameraComponent::GetStereoscopicView(RPI::ViewType viewType) const
-        {
-            AZ_Assert(viewType == RPI::ViewType::XrLeft || viewType == RPI::ViewType::XrRight, "View type %i not stereoscopic", viewType);
-            return m_cameraView->GetView(viewType);
         }
 
         bool CameraComponent::ReadInConfig(const AZ::ComponentConfig* baseConfig)
@@ -181,38 +155,7 @@ namespace AZ
 
         void CameraComponent::OnTransformChanged([[maybe_unused]] const AZ::Transform& local, const AZ::Transform& world)
         {
-            //Apply transform to stereoscopic views
-            for (AZ::u32 i = 0; i < m_numXrViews; i++)
-            {
-                RPI::ViewType xrViewType = i == 0 ? RPI::ViewType::XrLeft : RPI::ViewType::XrRight;
-
-                if (m_stereoscopicViewUpdate)
-                {
-                    // Apply the stereoscopic view provided by the device
-                    AZ::Matrix3x4 worldTransform =
-                        AZ::Matrix3x4::CreateFromQuaternionAndTranslation(m_stereoscopicViewQuats[i], world.GetTranslation());
-                    m_cameraView->SetCameraTransform(worldTransform, xrViewType);
-                }
-                else
-                {
-                    // Apply the view using keyboard/mouse input
-                    m_cameraView->SetCameraTransform(AZ::Matrix3x4::CreateFromTransform(world), xrViewType);
-                }
-            }
-
-            // Apply transform to non stereoscopic view (i.e default)
-            if (m_stereoscopicViewUpdate)
-            {
-                //Handle the case when we have a PC window showing the view of the left eye
-                AZ::Matrix3x4 worldTransform = AZ::Matrix3x4::CreateFromQuaternionAndTranslation(
-                    m_stereoscopicViewQuats[static_cast<uint32_t>(RPI::ViewType::XrLeft)], world.GetTranslation());
-                m_cameraView->SetCameraTransform(worldTransform);
-            }
-            else
-            {
-                m_cameraView->SetCameraTransform(AZ::Matrix3x4::CreateFromTransform(world));
-            }
-            m_stereoscopicViewUpdate = false;
+            m_cameraView->SetCameraTransform(AZ::Matrix3x4::CreateFromTransform(world));
 
             UpdateViewToClipMatrix();
         }
@@ -255,13 +198,6 @@ namespace AZ
         float CameraComponent::GetOrthographicHalfWidth()
         {
             return 0.0f;
-        }
-
-        void CameraComponent::SetXRViewQuaternion(const AZ::Quaternion& viewQuat, uint32_t xrViewIndex)
-        {
-            AZ_Assert(xrViewIndex < AZ::RPI::XRMaxNumViews, "Xr view index is out of range.");
-            m_stereoscopicViewQuats[xrViewIndex] = viewQuat;
-            m_stereoscopicViewUpdate = true;
         }
 
         void CameraComponent::SetFovDegrees(float fov)
@@ -386,27 +322,6 @@ namespace AZ
                 m_componentConfig.m_depthFar,
                 reverseDepth);
             m_cameraView->SetViewToClipMatrix(viewToClipMatrix);
-
-            //Update stereoscopic projection matrix
-            if (m_xrSystem)
-            {
-                AZ::Matrix4x4 projection = AZ::Matrix4x4::CreateIdentity();
-                for (AZ::u32 i = 0; i < m_numXrViews; i++)
-                {
-                    RPI::ViewType xrViewType = i == 0 ? RPI::ViewType::XrLeft : RPI::ViewType::XrRight;
-                    AZ::RPI::FovData fovData;
-                    [[maybe_unused]] AZ::RHI::ResultCode resultCode = m_xrSystem->GetViewFov(i, fovData);
-                    projection = m_xrSystem->CreateStereoscopicProjection(
-                        fovData.m_angleLeft,
-                        fovData.m_angleRight,
-                        fovData.m_angleDown,
-                        fovData.m_angleUp,
-                        m_componentConfig.m_depthNear,
-                        m_componentConfig.m_depthFar,
-                        reverseDepth);
-                    m_cameraView->SetStereoscopicViewToClipMatrix(projection, reverseDepth, xrViewType);
-                }
-            } 
         }
 
     } // namespace Debug

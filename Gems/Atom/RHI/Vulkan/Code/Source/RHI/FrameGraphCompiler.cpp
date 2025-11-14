@@ -224,12 +224,6 @@ namespace AZ
                 // If this is the last usage of a swap chain, we require that it be in the common state for presentation.
                 if (auto swapchainAttachment = azrtti_cast<RHI::SwapChainFrameAttachment*>(&imageFrameAttachment))
                 {
-                    // Skip adding synchronization constructs for XR swapchain as that is managed by OpenXr api
-                    if (swapchainAttachment->GetSwapChain()->GetDescriptor().m_isXrSwapChain)
-                    {
-                        continue;
-                    }
-
                     auto* lastScopeAttachment = imageFrameAttachment.GetLastScopeAttachment(deviceIndex);
 
                     Scope& lastScope = static_cast<Scope&>(lastScopeAttachment->GetScope());

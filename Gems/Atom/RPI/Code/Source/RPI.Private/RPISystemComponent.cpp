@@ -71,9 +71,9 @@ namespace AZ
             provided.push_back(AZ_CRC_CE("RPISystem"));
         }
 
-        void RPISystemComponent::GetDependentServices(AZ::ComponentDescriptor::DependencyArrayType& dependent)
+        void RPISystemComponent::GetDependentServices([[maybe_unused]] AZ::ComponentDescriptor::DependencyArrayType& dependent)
         {
-            dependent.push_back(AZ_CRC_CE("XRSystemService"));
+            
         }
 
         RPISystemComponent::RPISystemComponent()
@@ -206,16 +206,6 @@ namespace AZ
 
             // Stop execution since we can't recover from device removal error
             Debug::Trace::Instance().Crash();
-        }
-
-        void RPISystemComponent::RegisterXRInterface(XRRenderingInterface* xrSystemInterface)
-        {
-            m_rpiSystem.RegisterXRSystem(xrSystemInterface);
-        }
-
-        void RPISystemComponent::UnRegisterXRInterface()
-        {
-            m_rpiSystem.UnregisterXRSystem();
         }
 
         AZ_CVAR_EXTERNED(AZ::u32, r_metricsNumberOfCaptureBatches);

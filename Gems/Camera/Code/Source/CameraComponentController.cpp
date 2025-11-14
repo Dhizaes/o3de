@@ -223,29 +223,11 @@ namespace Camera
         };
         m_atomCameraViewGroup = AZStd::make_shared<AZ::RPI::ViewGroup>();
         m_atomCameraViewGroup->Init(AZ::RPI::ViewGroup::Descriptor{ onChange, nullptr });
-        
-        if (auto rpiSystemInterface = AZ::RPI::RPISystemInterface::Get())
-        {
-            m_xrSystem = rpiSystemInterface->GetXRSystem();
-            if (m_xrSystem)
-            {
-                m_numSterescopicViews = m_xrSystem->GetNumViews();
-                AZ_Assert(m_numSterescopicViews <= AZ::RPI::XRMaxNumViews, "Atom only supports two XR views");
-            }
-        }
     }
 
     void CameraComponentController::Activate(AZ::EntityId entityId)
     {
         m_entityId = entityId;
-
-        // Let's set the camera default transforms:
-        AZ::TransformBus::EventResult(m_xrCameraToBaseSpaceTm, m_entityId, &AZ::TransformBus::Handler::GetWorldTM);
-        m_xrBaseSpaceToHeadTm = AZ::Transform::CreateIdentity();
-        m_xrHeadToLeftEyeTm = AZ::Transform::CreateIdentity();
-        m_xrHeadToRightEyeTm = AZ::Transform::CreateIdentity();
-
-        AZ::RPI::XRSpaceNotificationBus::Handler::BusConnect();
 
         auto atomViewportRequests = AZ::Interface<AZ::RPI::ViewportContextRequestsInterface>::Get();
         
@@ -278,7 +260,6 @@ namespace Camera
                         GetView());
                 }
             }
-            m_atomCameraViewGroup->CreateStereoscopicViews(cameraName);
 
             AZ::RPI::ViewProviderBus::Handler::BusConnect(m_entityId);
             m_atomCameraViewGroup->Activate();
@@ -309,8 +290,6 @@ namespace Camera
 
     void CameraComponentController::Deactivate()
     {
-        AZ::RPI::XRSpaceNotificationBus::Handler::BusDisconnect();
-
         if (m_renderToTexturePipeline)
         {
             auto scene = AZ::RPI::RPISystemInterface::Get()->GetSceneByName(AZ::Name("Main"));
@@ -466,11 +445,6 @@ namespace Camera
         UpdateCamera();
     }
 
-    void CameraComponentController::SetXRViewQuaternion([[maybe_unused]] const AZ::Quaternion& viewQuat, [[maybe_unused]] uint32_t xrViewIndex)
-    {
-        //No implementation needed as we are calling into CR system directly to get view data within OnTransformChanged
-    }
-
     void CameraComponentController::MakeActiveView()
     {
         if (IsActiveView())
@@ -567,34 +541,7 @@ namespace Camera
         }
 
         m_updatingTransformFromEntity = true;
-
-        if (m_xrSystem && m_xrSystem->ShouldRender())
-        {
-            // When the XR System is active, The camera world transform will always be:
-            // camWorldTm = m_xrCameraToBaseSpaceTm * m_xrBaseSpaceToHeadTm.
-            // But when OnTransformChanged is called, may be because a Lua Script is changing
-            // the camera location, we need to apply the inverse operation to preserve the value
-            // of m_xrCameraToBaseSpaceTm.
-            // This is the quick math:
-            // m_xrCameraToBaseSpaceTm~ * camWorldTm = m_xrCameraToBaseSpaceTm~ * m_xrCameraToBaseSpaceTm * m_xrBaseSpaceToHeadTm
-            // m_xrCameraToBaseSpaceTm~ * camWorldTm = m_xrBaseSpaceToHeadTm
-            // m_xrCameraToBaseSpaceTm~ * camWorldTm * camWorldTm~ = m_xrBaseSpaceToHeadTm * camWorldTm~
-            // m_xrCameraToBaseSpaceTm~ = m_xrBaseSpaceToHeadTm * camWorldTm~
-            // m_xrCameraToBaseSpaceTm~~ = (m_xrBaseSpaceToHeadTm * camWorldTm~)~
-            // m_xrCameraToBaseSpaceTm = camWorldTm~~ * m_xrBaseSpaceToHeadTm~
-            // m_xrCameraToBaseSpaceTm = camWorldTm * m_xrBaseSpaceToHeadTm~
-            m_xrCameraToBaseSpaceTm = world * m_xrBaseSpaceToHeadTm.GetInverse();
-            m_updatingTransformFromEntity = false;
-            // We are not going to call m_atomCameraViewGroup->SetCameraTransform() yet.
-            // We need to wait for the OnXRSpaceLocationsChanged() notification, which will give us
-            // the XR Headset orientation.
-            return;
-        }
-        else
-        {
-            m_atomCameraViewGroup->SetCameraTransform(AZ::Matrix3x4::CreateFromTransform(world.GetOrthogonalized()));
-        }
-
+        m_atomCameraViewGroup->SetCameraTransform(AZ::Matrix3x4::CreateFromTransform(world.GetOrthogonalized()));
         m_updatingTransformFromEntity = false;
 
         UpdateCamera();
@@ -616,11 +563,6 @@ namespace Camera
     AZ::RPI::ViewPtr CameraComponentController::GetView() const
     {
         return m_atomCameraViewGroup->GetView(AZ::RPI::ViewType::Default);
-    }
-
-    AZ::RPI::ViewPtr CameraComponentController::GetStereoscopicView(AZ::RPI::ViewType viewType) const
-    {
-        return m_atomCameraViewGroup->GetView(viewType);
     }
 
     void CameraComponentController::UpdateCamera()
@@ -661,31 +603,6 @@ namespace Camera
             }
             m_updatingTransformFromEntity = true;
             m_atomCameraViewGroup->SetViewToClipMatrix(viewToClipMatrix);
-
-            // Update stereoscopic projection matrix
-            if (m_xrSystem && m_xrSystem->ShouldRender())
-            {
-                AZ::Matrix4x4 projection = AZ::Matrix4x4::CreateIdentity();
-                for (AZ::u32 i = 0; i < m_numSterescopicViews; i++)
-                {
-                    AZ::RPI::ViewType viewType = i == 0 ? AZ::RPI::ViewType::XrLeft : AZ::RPI::ViewType::XrRight;
-                    AZ::RPI::FovData fovData;
-                    m_xrSystem->GetViewFov(i, fovData);
-
-                    if ( (fovData.m_angleLeft != 0 || fovData.m_angleRight != 0) && (fovData.m_angleUp != 0 || fovData.m_angleDown != 0))
-                    {
-                        projection = m_xrSystem->CreateStereoscopicProjection(
-                            fovData.m_angleLeft,
-                            fovData.m_angleRight,
-                            fovData.m_angleDown,
-                            fovData.m_angleUp,
-                            m_config.m_nearClipDistance,
-                            m_config.m_farClipDistance,
-                            reverseDepth);
-                        m_atomCameraViewGroup->SetStereoscopicViewToClipMatrix(projection, reverseDepth, viewType);
-                    }
-                }
-            } 
             m_updatingTransformFromEntity = false;
         }
     }
@@ -700,43 +617,5 @@ namespace Camera
             }
         }
     }
-
-    ////////////////////////////////////////////////////////////////////
-    // AZ::RPI::XRSpaceNotificationBus::Handler Overrides
-    void CameraComponentController::OnXRSpaceLocationsChanged(
-        const AZ::Transform& baseSpaceToHeadTm,
-        const AZ::Transform& headToleftEyeTm,
-        const AZ::Transform& headToRightEyeTm)
-    {
-        if (!m_xrSystem || !m_xrSystem->ShouldRender())
-        {
-            return;
-        }
-
-        m_updatingTransformFromEntity = true;
-
-        m_xrBaseSpaceToHeadTm = baseSpaceToHeadTm;
-        const auto mainCameraWorldTm = m_xrCameraToBaseSpaceTm * baseSpaceToHeadTm;
-
-        AZ::TransformBus::Event(m_entityId, &AZ::TransformBus::Handler::SetWorldTM, mainCameraWorldTm);
-
-        // Update camera world matrix for the main pipeline.
-        m_atomCameraViewGroup->SetCameraTransform(AZ::Matrix3x4::CreateFromTransform(mainCameraWorldTm));
-
-        // Update camera world matrix for the left eye pipeline.
-        m_xrHeadToLeftEyeTm = headToleftEyeTm;
-        const auto leftEyeWorldTm = mainCameraWorldTm * headToleftEyeTm;
-        m_atomCameraViewGroup->SetCameraTransform(AZ::Matrix3x4::CreateFromTransform(leftEyeWorldTm), AZ::RPI::ViewType::XrLeft);
-
-        // Update camera world matrix for the right eye pipeline.
-        m_xrHeadToRightEyeTm = headToRightEyeTm;
-        const auto rightEyeWorldTm = mainCameraWorldTm * headToRightEyeTm;
-        m_atomCameraViewGroup->SetCameraTransform(AZ::Matrix3x4::CreateFromTransform(rightEyeWorldTm), AZ::RPI::ViewType::XrRight);
-
-        UpdateCamera();
-
-        m_updatingTransformFromEntity = false;
-    }
-    ////////////////////////////////////////////////////////////////////
 
 } //namespace Camera

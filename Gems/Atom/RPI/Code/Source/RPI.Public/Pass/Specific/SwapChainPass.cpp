@@ -170,29 +170,6 @@ namespace AZ
 
             RHI::FrameGraphAttachmentInterface attachmentDatabase = params.m_frameGraphBuilder->GetAttachmentDatabase();
 
-            AZ::RPI::RPISystemInterface* rpiSystem = AZ::RPI::RPISystemInterface::Get();
-            if (rpiSystem->GetXRSystem())
-            {
-                switch (m_viewType)
-                {
-                case ViewType::XrLeft:
-                    {
-                        rpiSystem->GetXRSystem()->AcquireSwapChainImage(0);
-                        break;
-                    }
-                case ViewType::XrRight:
-                    {
-                        rpiSystem->GetXRSystem()->AcquireSwapChainImage(1);
-                        break;
-                    }
-                default:
-                    {
-                        // No need to do anything for non-xr swapchain
-                        break;
-                    }
-                } 
-            }
-
             // Import the SwapChain
             attachmentDatabase.ImportSwapChain(
                 m_windowContext->GetSwapChainAttachmentId(m_viewType), m_windowContext->GetSwapChain(m_viewType));

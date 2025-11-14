@@ -90,11 +90,6 @@ namespace AZ
             return RHI::APILowPriority;
         }
 
-        bool SystemComponent::SupportsXR() const
-        {
-            return false;
-        }
-
         RHI::PhysicalDeviceList SystemComponent::EnumeratePhysicalDevices()
         {
             return PhysicalDevice::Enumerate();

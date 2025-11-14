@@ -147,7 +147,7 @@ namespace AtomToolsFramework
         // we provide this controller list to allow handlers to listen for input and update events.
         AzFramework::ViewportControllerListPtr m_controllerList;
         // The default camera group for our viewport i.e. the one used when a camera entity hasn't been activated.
-        // The group contains stereoscopic and non-stereoscopic views.
+        // The group contains views.
         AZ::RPI::ViewGroupPtr m_defaultCameraGroup;
         // Our viewport-local aux geom pipeline for supplemental rendering.
         AZ::RPI::AuxGeomDrawPtr m_auxGeom;

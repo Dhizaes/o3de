@@ -32,7 +32,6 @@
 #include <Atom/RHI/Device.h>
 #include <Atom/RHI.Reflect/PlatformLimitsDescriptor.h>
 #include <Atom/RHI/RHIUtils.h>
-#include <Atom/RHI/XRRenderingInterface.h>
 
 #include <AzCore/Interface/Interface.h>
 #include <AzCore/Time/ITime.h>
@@ -290,34 +289,6 @@ namespace AZ
             return AZ::TimeUsToSeconds(currentSimulationTimeUs);
         }
 
-        void RPISystem::InitXRSystem()
-        {
-            // The creation of an XR Session requires an asset that defines
-            // the action bindings for the application. This means the asset catalog
-            // must be available before creating the XR Session.
-            AZ_Assert(m_systemAssetsInitialized, "IntXRSystem should not be called before the asset system is ready.");
-
-            if (!m_xrSystem)
-            {
-                return;
-            }
-
-            auto xrRender = m_xrSystem->GetRHIXRRenderingInterface();
-            if (!xrRender)
-            {
-                return;
-            }
-
-            RHI::Ptr<RHI::XRDeviceDescriptor> xrDescriptor = m_rhiSystem.GetDevice()->BuildXRDescriptor();
-            [[maybe_unused]] auto result = xrRender->CreateDevice(xrDescriptor.get());
-            AZ_Error("RPISystem", result == RHI::ResultCode::Success, "Failed to initialize XR device");
-            AZ::RHI::XRSessionDescriptor sessionDescriptor;
-            result = xrRender->CreateSession(&sessionDescriptor);
-            AZ_Error("RPISystem", result == RHI::ResultCode::Success, "Failed to initialize XR session");
-            result = xrRender->CreateSwapChain();
-            AZ_Error("RPISystem", result == RHI::ResultCode::Success, "Failed to initialize XR swapchain");
-        }
-
         void RPISystem::RenderTick()
         {
             if (!m_systemAssetsInitialized || IsNullRenderer())
@@ -456,10 +427,6 @@ namespace AZ
 
             m_systemAssetsInitialized = true;
             AZ_TracePrintf("RPI system", "System assets initialized\n");
-
-            // Now that the asset system is up and running, we can safely initialize
-            // the XR System and the XR Session.
-            InitXRSystem();
         }
 
         bool RPISystem::IsInitialized() const
@@ -535,28 +502,5 @@ namespace AZ
             return m_multisampleState;
         }
 
-        void RPISystem::RegisterXRSystem(XRRenderingInterface* xrSystemInterface)
-        { 
-            AZ_Assert(!m_xrSystem, "XR System is already registered");
-            if (m_rhiSystem.RegisterXRSystem(xrSystemInterface->GetRHIXRRenderingInterface()))
-            {
-                m_xrSystem = xrSystemInterface;
-            }
-        }
-
-        void RPISystem::UnregisterXRSystem()
-        {
-            AZ_Assert(m_xrSystem, "XR System is not registered");
-            if (m_xrSystem)
-            {
-                m_rhiSystem.UnregisterXRSystem();
-                m_xrSystem = nullptr;
-            }
-        }
-
-        XRRenderingInterface* RPISystem::GetXRSystem() const
-        {
-            return m_xrSystem;
-        } 
     } //namespace RPI
 } //namespace AZ

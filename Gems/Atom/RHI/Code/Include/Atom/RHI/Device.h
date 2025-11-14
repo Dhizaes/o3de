@@ -10,7 +10,6 @@
 
 #include <Atom/RHI/BindlessSrgDescriptor.h>
 #include <Atom/RHI/ObjectCollector.h>
-#include <Atom/RHI/XRRenderingInterface.h>
 #include <Atom/RHI.Reflect/DeviceDescriptor.h>
 #include <Atom/RHI.Reflect/DeviceFeatures.h>
 #include <Atom/RHI.Reflect/DeviceLimits.h>
@@ -162,9 +161,6 @@ namespace AZ::RHI
         // Accessors
         void SetLastExecutingScope(const AZStd::string_view scopeName);
         AZStd::string_view GetLastExecutingScope() const;
-
-        //! Builds an implementation specific XR device descriptor based on this graphics device.
-        virtual Ptr<XRDeviceDescriptor> BuildXRDescriptor() const { return nullptr; }
 
     protected:
 

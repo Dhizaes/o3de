@@ -21,7 +21,6 @@
 #include <Atom/RPI.Public/ViewGroup.h>
 #include <Atom/RPI.Public/WindowContext.h>
 #include <Atom/RPI.Public/WindowContextBus.h>
-#include <Atom/RPI.Public/XR/XRRenderingInterface.h>
 
 namespace AZ
 {
@@ -78,7 +77,6 @@ namespace AZ
 
             // RPI::ViewProviderBus::Handler overrides...
             RPI::ViewPtr GetView() const override;
-            RPI::ViewPtr GetStereoscopicView(RPI::ViewType viewType) const override;
 
         private:
             // AZ::Component overrides...
@@ -105,7 +103,6 @@ namespace AZ
             void SetFrustumHeight(float height) override;
             void SetOrthographic(bool orthographic) override;
             void SetOrthographicHalfWidth(float halfWidth) override;
-            void SetXRViewQuaternion(const AZ::Quaternion& viewQuat, uint32_t xrViewIndex) override;
 
             void MakeActiveView() override;
             bool IsActiveView() override;
@@ -120,16 +117,9 @@ namespace AZ
             void UpdateAspectRatio();
             void UpdateViewToClipMatrix();
 
-            // ViewGroup to help manage stereoscopic and non-stereoscopic views.
-            // This will allow us to render to PC window as well as a XR device at the same time 
+            // ViewGroup to help manage views.
+            // This will allow us to render to PC window
             AZ::RPI::ViewGroupPtr m_cameraView;
-
-            // Stereoscopic view related data
-            RPI::XRRenderingInterface* m_xrSystem = nullptr;
-            AZ::u32 m_numXrViews = 0;
-            AZStd::fixed_vector<AZ::Quaternion, AZ::RPI::XRMaxNumViews> m_stereoscopicViewQuats;
-            // Boolean used to indicate when the stereoscopic view was updated
-            bool m_stereoscopicViewUpdate = false;
 
             // Work around the EntityContext being detached before the camera component is deactivated.
             // Without EntityContext class can't get AuxGeomFeatureProcessor to clean up per view draw interface.

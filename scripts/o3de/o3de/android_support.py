@@ -1635,9 +1635,6 @@ class AndroidProjectGenerator(object):
             if self._ninja_path:
                 cmake_argument_list.append(f'"-DCMAKE_MAKE_PROGRAM={self._ninja_path.as_posix()}"')
 
-            if self._is_oculus_project:
-                cmake_argument_list.append('"-DANDROID_USE_OCULUS_OPENXR=ON"')
-
             if self._gradle_plugin_version < Version('7.0'):
                 cmake_argument_list.append(f'"-DLY_PROJECTS={template_project_path}"')
 

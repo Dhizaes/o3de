@@ -16,7 +16,6 @@
 
 #include <AzCore/Name/Name.h>
 #include <AzFramework/Windowing/WindowBus.h>
-#include <Atom/RPI.Public/XR/XRRenderingInterface.h>
 
 namespace AZ
 {
@@ -103,9 +102,6 @@ namespace AZ
             //! Application multisample state
             virtual void SetApplicationMultisampleState(const RHI::MultisampleState& multisampleState) = 0;
             virtual const RHI::MultisampleState& GetApplicationMultisampleState() const = 0;
-
-            //! Get the XR system for XR specific functionality
-            virtual XRRenderingInterface* GetXRSystem() const = 0;
         };
 
     } // namespace RPI

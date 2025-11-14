@@ -7,7 +7,6 @@
  */
 #include <Atom/RHI.Reflect/VkAllocator.h>
 #include <Atom/RHI.Reflect/Vulkan/VulkanBus.h>
-#include <Atom/RHI.Reflect/Vulkan/XRVkDescriptors.h>
 #include <Atom/RHI/RHIBus.h>
 #include <Atom/RHI/RHIUtils.h>
 #include <AzCore/Debug/Trace.h>
