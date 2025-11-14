@@ -206,7 +206,6 @@ namespace O3DE::ProjectManager
                     QMessageBox::critical(this, tr("Failed to open CMake GUI"), result.GetError(), QMessageBox::Ok);
                 }
             });
-        connect(projectButton, &ProjectButton::OpenAndroidProjectGenerator, this, &ProjectsScreen::HandleOpenAndroidProjectGenerator);
         connect(projectButton, &ProjectButton::OpenProjectExportSettings, this, &ProjectsScreen::HandleOpenProjectExportSettings);
 
         return projectButton;
@@ -662,61 +661,6 @@ namespace O3DE::ProjectManager
                 emit NotifyProjectRemoved(projectPath);
             }
         }
-    }
-
-    void ProjectsScreen::HandleOpenAndroidProjectGenerator(const QString& projectPath)
-    {
-        AZ::Outcome<EngineInfo> engineInfoResult = PythonBindingsInterface::Get()->GetProjectEngine(projectPath);
-        AZ::Outcome projectBuildPathResult = ProjectUtils::GetProjectBuildPath(projectPath);
-
-        auto engineInfo = engineInfoResult.TakeValue();
-        auto buildPath = projectBuildPathResult.TakeValue();
-
-        QString projectName = tr("Project");
-        auto getProjectResult = PythonBindingsInterface::Get()->GetProject(projectPath);
-        if (getProjectResult)
-        {
-            projectName = getProjectResult.GetValue().m_displayName;
-        }
-
-        const QString pythonPath = ProjectUtils::GetPythonExecutablePath(engineInfo.m_path);
-        const QString apgPath = QString("%1/Code/Tools/Android/ProjectGenerator/main.py").arg(engineInfo.m_path);
-
-
-        AZ_Printf("ProjectManager", "APG Info:\nProject Name: %s\nProject Path: %s\nEngine Path: %s\n3rdParty Path: %s\nBuild Path: %s\nPython Path: %s\nAPG path: %s\n",
-            projectName.toUtf8().constData(),
-            projectPath.toUtf8().constData(),
-            engineInfo.m_path.toUtf8().constData(),
-            engineInfo.m_thirdPartyPath.toUtf8().constData(),
-            buildPath.toUtf8().constData(),
-            pythonPath.toUtf8().constData(),
-            apgPath.toUtf8().constData());
-
-        // Let's start the python script.
-        QProcess process;        
-        process.setProgram(pythonPath);
-        const QStringList commandArgs { apgPath,
-                                        "--e", engineInfo.m_path,
-                                        "--p", projectPath,
-                                        "--b", buildPath,
-                                        "--t", engineInfo.m_thirdPartyPath };
-        process.setArguments(commandArgs);
-
-        // It's important to dump the command details in the application log so the user
-        // would know how to spawn the Android Project Generator from the command terminal
-        // in case of errors and debugging is required.
-        const QString commandArgsStr = QString("%1 %2").arg(pythonPath, commandArgs.join(" "));
-        AZ_Printf("ProjectManager", "Will start the Android Project Generator with the following command:\n%s\n", commandArgsStr.toUtf8().constData()); 
-
-        if (!process.startDetached())
-        {
-            QMessageBox::warning(
-                this,
-                tr("Tool Error"),
-                tr("Failed to start Android Project Generator from path %1").arg(apgPath),
-                QMessageBox::Ok);
-        }
-        
     }
 
     void ProjectsScreen::HandleOpenProjectExportSettings(const QString& projectPath)

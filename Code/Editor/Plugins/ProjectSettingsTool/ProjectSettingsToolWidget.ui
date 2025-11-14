@@ -94,18 +94,6 @@
                   <property name="tabBarAutoHide">
                    <bool>false</bool>
                   </property>
-                  <widget class="QWidget" name="androidTab">
-                   <attribute name="title">
-                    <string>Android</string>
-                   </attribute>
-                   <layout class="QGridLayout" name="gridLayout_8"/>
-                  </widget>
-                  <widget class="QWidget" name="iosTab">
-                   <attribute name="title">
-                    <string>    iOS    </string>
-                   </attribute>
-                   <layout class="QGridLayout" name="gridLayout_9"/>
-                  </widget>
                  </widget>
                 </item>
                </layout>

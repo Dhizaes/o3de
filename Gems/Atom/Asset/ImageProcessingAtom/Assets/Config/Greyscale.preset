@@ -15,28 +15,6 @@
             }
         },
         "PlatformsPresets": {
-            "android": {
-                "UUID": "{B6B04FD3-BD7B-44AC-AD93-6FECD2BD4D76}",
-                "Name": "Greyscale",
-                "SourceColor": "Linear",
-                "DestColor": "Linear",
-                "PixelFormat": "ASTC_4x4",
-                "Swizzle": "rrr1",
-                "MipMapSetting": {
-                    "MipGenType": "Box"
-                }
-            },
-            "ios": {
-                "UUID": "{B6B04FD3-BD7B-44AC-AD93-6FECD2BD4D76}",
-                "Name": "Greyscale",
-                "SourceColor": "Linear",
-                "DestColor": "Linear",
-                "PixelFormat": "ASTC_4x4",
-                "Swizzle": "rrr1",
-                "MipMapSetting": {
-                    "MipGenType": "Box"
-                }
-            },
             "mac": {
                 "UUID": "{B6B04FD3-BD7B-44AC-AD93-6FECD2BD4D76}",
                 "Name": "Greyscale",

@@ -89,7 +89,6 @@ namespace AssetProcessor
         EXPECT_FALSE(gameName.isEmpty());
 
         m_config.EnablePlatform({ "pc",{ "desktop", "renderer" } }, true);
-        m_config.EnablePlatform({ "android",{ "mobile", "renderer" } }, true);
         m_config.EnablePlatform({ "fandago",{ "console", "renderer" } }, false);
         AZStd::vector<AssetBuilderSDK::PlatformInfo> platforms;
         m_config.PopulatePlatformsForScanFolder(platforms);
@@ -247,16 +246,11 @@ namespace AssetProcessor
             //Calculating fingerprints for the file for pc and android platforms
             AZ::Uuid sourceId = AZ::Uuid("{2206A6E0-FDBC-45DE-B6FE-C2FC63020BD5}");
             JobEntry jobEntryPC(SourceAssetReference(scanFolderPath, relPath), {}, { "pc", {"desktop", "renderer"} }, "", 0, 1, sourceId);
-            JobEntry jobEntryANDROID(SourceAssetReference(scanFolderPath, relPath), {}, { "android", {"mobile", "renderer"} }, "", 0, 2, sourceId);
 
             JobDetails jobDetailsPC;
             jobDetailsPC.m_extraInformationForFingerprinting = extraInfoForPC.toUtf8().constData();
             jobDetailsPC.m_jobEntry = jobEntryPC;
-            JobDetails jobDetailsANDROID;
-            jobDetailsANDROID.m_extraInformationForFingerprinting = extraInfoForANDROID.toUtf8().constData();
-            jobDetailsANDROID.m_jobEntry = jobEntryANDROID;
             fingerprintForPC = AssetUtilities::GenerateFingerprint(jobDetailsPC);
-            fingerprintForANDROID = AssetUtilities::GenerateFingerprint(jobDetailsANDROID);
         }
     }
 

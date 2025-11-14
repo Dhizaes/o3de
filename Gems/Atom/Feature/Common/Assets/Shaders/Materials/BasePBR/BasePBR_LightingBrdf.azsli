@@ -38,11 +38,7 @@ real3 GetDiffuseLighting_BasePBR(Surface surface, LightingData lightingData, rea
 
 real3 GetSpecularLighting_BasePBR(Surface surface, LightingData lightingData, const real3 lightIntensity, const real3 dirToLight, uint viewIndex)
 {
-#if ENABLE_MOBILEBRDF
-    real3 specular = SpecularGGXMobile(lightingData.dirToCamera[viewIndex], dirToLight, surface.GetSpecularNormal(), surface.GetSpecularF0(), surface.roughnessA2, surface.roughnessA, surface.roughnessLinear);
-#else
     real3 specular = SpecularGGX(lightingData.dirToCamera[viewIndex], dirToLight, surface.GetSpecularNormal(), surface.GetSpecularF0(), lightingData.GetSpecularNdotV(viewIndex), surface.roughnessA2, lightingData.multiScatterCompensation);
-#endif
     specular *= lightIntensity;
     return specular;
 }

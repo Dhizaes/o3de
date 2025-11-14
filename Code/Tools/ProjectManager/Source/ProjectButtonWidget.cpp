@@ -366,11 +366,9 @@ namespace O3DE::ProjectManager
         menu->addSeparator();
         QMenu* exportMenu = menu->addMenu(tr("Export Launcher"));
         exportMenu->addAction(AZ_TRAIT_PROJECT_MANAGER_HOST_PLATFORM_NAME , this, [this](){ emit ExportProject(m_projectInfo, "export_source_built_project.py");});
-        exportMenu->addAction(tr("Android"), this, [this](){ emit ExportProject(m_projectInfo, "export_source_android.py"); });
         menu->addAction(tr("Open Export Settings..."), this, [this]() { emit OpenProjectExportSettings(m_projectInfo.m_path); });
         menu->addSeparator();
         menu->addAction(tr("Open CMake GUI..."), this, [this]() { emit OpenCMakeGUI(m_projectInfo); });
-        menu->addAction(tr("Open Android Project Generator..."), this, [this]() { emit OpenAndroidProjectGenerator(m_projectInfo.m_path); });
         menu->addSeparator();
         menu->addAction(tr("Open Project folder..."), this, [this]()
         { 

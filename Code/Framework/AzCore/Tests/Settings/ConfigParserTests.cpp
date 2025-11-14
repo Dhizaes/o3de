@@ -287,22 +287,14 @@ mac_wait_for_connect=0
         , AZStd::fixed_vector<ConfigFileParams::SettingsKeyValueTuple, 20>{
             ConfigFileParams::SettingsKeyValueTuple{"project_path", AZStd::string_view{"TestProject"}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"remote_filesystem", AZ::s64{0}, {}},
-            ConfigFileParams::SettingsKeyValueTuple{"android_remote_filesystem", AZ::s64{0}, {}},
-            ConfigFileParams::SettingsKeyValueTuple{"ios_remote_filesystem", AZ::s64{0}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"mac_remote_filesystem", AZ::s64{0}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"assets", AZStd::string_view{"pc"}, {}},
-            ConfigFileParams::SettingsKeyValueTuple{"android_assets", AZStd::string_view{"android"}, {}},
-            ConfigFileParams::SettingsKeyValueTuple{"ios_assets", AZStd::string_view{"ios"}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"mac_assets", AZStd::string_view{"mac"}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"connect_to_remote", AZ::s64{0}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"windows_connect_to_remote", AZ::s64{1}, {}},
-            ConfigFileParams::SettingsKeyValueTuple{"android_connect_to_remote", AZ::s64{0}, {}},
-            ConfigFileParams::SettingsKeyValueTuple{"ios_connect_to_remote", AZ::s64{0}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"mac_connect_to_remote", AZ::s64{0}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"wait_for_connect", AZ::s64{0}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"windows_wait_for_connect", AZ::s64{1}, {}},
-            ConfigFileParams::SettingsKeyValueTuple{"android_wait_for_connect", AZ::s64{0}, {}},
-            ConfigFileParams::SettingsKeyValueTuple{"ios_wait_for_connect", AZ::s64{0}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"mac_wait_for_connect", AZ::s64{0}, {}},
         }},
         // Parses a fake AssetProcessorPlatformConfig file which contains sections headers
@@ -331,19 +323,11 @@ test_asset_processor_tag = test_value
 [Platform pc]
 tags=tools,renderer,dx12,vulkan
 
-[Platform android]
-tags=android,mobile,renderer,vulkan ; With Comments at the end
-; validate leading and trailing whitespace is not parsed when examining the section header
-      [Platform ios]     
-tags=mobile,renderer,metal
-
 [Platform mac]
 tags=tools,renderer,metal)"
         , AZStd::fixed_vector<ConfigFileParams::SettingsKeyValueTuple, 20>{
             ConfigFileParams::SettingsKeyValueTuple{"test_asset_processor_tag", AZStd::string_view{"test_value"}, {}},
             ConfigFileParams::SettingsKeyValueTuple{"Platform pc/tags", AZStd::string_view{"tools,renderer,dx12,vulkan"}, "Platform pc"},
-            ConfigFileParams::SettingsKeyValueTuple{"Platform android/tags", AZStd::string_view{"android,mobile,renderer,vulkan"}, "Platform android"},
-            ConfigFileParams::SettingsKeyValueTuple{"Platform ios/tags", AZStd::string_view{"mobile,renderer,metal"}, "Platform ios"},
             ConfigFileParams::SettingsKeyValueTuple{"Platform mac/tags", AZStd::string_view{"tools,renderer,metal"}, "Platform mac"},
         }}
         )

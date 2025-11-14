@@ -13,8 +13,6 @@ namespace ProjectSettingsTool
     enum class PlatformId
     {
         Base,
-        Android,
-        Ios,
 
         NumPlatformIds
     };
@@ -35,9 +33,7 @@ namespace ProjectSettingsTool
 
     const Platform Platforms[static_cast<unsigned>(PlatformId::NumPlatformIds)]
     {
-        Platform{ PlatformId::Base, PlatformDataType::ProjectJson },
-        Platform{ PlatformId::Android, PlatformDataType::PlatformResource },
-        Platform{ PlatformId::Ios, PlatformDataType::PlatformResource }
+        Platform{ PlatformId::Base, PlatformDataType::ProjectJson }
     };
     
 } // namespace ProjectSettingsTool

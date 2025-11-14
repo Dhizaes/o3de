@@ -30,7 +30,6 @@ TEST_F(PlatformHelperTest, MultiplePlatformFlags_PlatformId_Valid)
     auto platforms = AzFramework::PlatformHelper::GetPlatforms(platformFlags);
     EXPECT_EQ(platforms.size(), 2);
     EXPECT_EQ(platforms[0], "pc");
-    EXPECT_EQ(platforms[1], "android");
 }
 
 TEST_F(PlatformHelperTest, SpecialAllFlag_PlatformId_Valid)
@@ -38,7 +37,7 @@ TEST_F(PlatformHelperTest, SpecialAllFlag_PlatformId_Valid)
     AzFramework::PlatformFlags platformFlags = AzFramework::PlatformFlags::Platform_ALL;
     auto platforms = AzFramework::PlatformHelper::GetPlatformsInterpreted(platformFlags);
     EXPECT_EQ(platforms.size(), AzFramework::NumPlatforms);
-    EXPECT_THAT(platforms, testing::UnorderedElementsAre("pc", "linux", "android", "ios", "mac", "provo", "salem", "jasper", "server"));
+    EXPECT_THAT(platforms, testing::UnorderedElementsAre("pc", "linux", "mac", "provo", "salem", "jasper", "server"));
 }
 
 TEST_F(PlatformHelperTest, SpecialAllClientFlag_PlatformId_Valid)
@@ -46,7 +45,7 @@ TEST_F(PlatformHelperTest, SpecialAllClientFlag_PlatformId_Valid)
     AzFramework::PlatformFlags platformFlags = AzFramework::PlatformFlags::Platform_ALL_CLIENT;
     auto platforms = AzFramework::PlatformHelper::GetPlatformsInterpreted(platformFlags);
     EXPECT_EQ(platforms.size(), AzFramework::NumClientPlatforms);
-    EXPECT_THAT(platforms, testing::UnorderedElementsAre("pc", "linux", "android", "ios", "mac", "provo", "salem", "jasper"));
+    EXPECT_THAT(platforms, testing::UnorderedElementsAre("pc", "linux", "mac", "provo", "salem", "jasper"));
 }
 
 TEST_F(PlatformHelperTest, InvalidPlatformFlags_PlatformId_Empty)

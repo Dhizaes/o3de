@@ -36,8 +36,6 @@ namespace O3DE::ProjectManager
         , m_headerWidget(header)
         , m_readOnly(readOnly)
     {
-        AddPlatformIcon(GemInfo::Android, ":/Android.svg");
-        AddPlatformIcon(GemInfo::iOS, ":/iOS.svg");
         AddPlatformIcon(GemInfo::Linux, ":/Linux.svg");
         AddPlatformIcon(GemInfo::macOS, ":/macOS.svg");
         AddPlatformIcon(GemInfo::Windows, ":/Windows.svg");

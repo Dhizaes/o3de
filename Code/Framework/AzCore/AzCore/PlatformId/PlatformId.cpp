@@ -20,10 +20,6 @@ namespace AZ
             return "Win64";
         case PlatformID::PLATFORM_LINUX_64:
             return "Linux";
-        case PlatformID::PLATFORM_ANDROID_64:
-            return "Android64";
-        case PlatformID::PLATFORM_APPLE_IOS:
-            return "iOS";
         case PlatformID::PLATFORM_APPLE_MAC:
             return "Mac";
 #if defined(AZ_EXPAND_FOR_RESTRICTED_PLATFORM) || defined(AZ_TOOLS_EXPAND_FOR_RESTRICTED_PLATFORMS)

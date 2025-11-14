@@ -146,20 +146,6 @@ namespace UnitTest
         }
     }
 
-    TEST_F(PlatformAddressedAssetCatalogManagerTest, PlatformAddressedAssetCatalogManager_CatalogExistsChecks_Success)
-    {
-        EXPECT_EQ(AzToolsFramework::PlatformAddressedAssetCatalog::CatalogExists(AzFramework::PlatformId::ANDROID_ID), true);
-        AZStd::string androidCatalogPath = AzToolsFramework::PlatformAddressedAssetCatalog::GetCatalogRegistryPathForPlatform(AzFramework::PlatformId::ANDROID_ID);
-        if (AZ::IO::FileIOBase::GetInstance()->Exists(androidCatalogPath.c_str()))
-        {
-            AZ_TEST_START_TRACE_SUPPRESSION;
-            AZ::IO::Result result = AZ::IO::FileIOBase::GetInstance()->Remove(androidCatalogPath.c_str());
-            EXPECT_EQ(result.GetResultCode(), AZ::IO::ResultCode::Success);
-            AZ_TEST_STOP_TRACE_SUPPRESSION(1); // removing from asset cache folder
-        }
-        EXPECT_EQ(AzToolsFramework::PlatformAddressedAssetCatalog::CatalogExists(AzFramework::PlatformId::ANDROID_ID), false);
-    }
-
     class PlatformAddressedAssetCatalogMessageTest : public AzToolsFramework::PlatformAddressedAssetCatalog
     {
     public:
@@ -210,37 +196,4 @@ namespace UnitTest
         AZStd::unique_ptr<AzToolsFramework::PlatformAddressedAssetCatalogManager> m_platformAddressedAssetCatalogManager;
         AZ::Test::ScopedAutoTempDirectory m_tempDir;
     };
-
-    TEST_F(MessageTest, PlatformAddressedAssetCatalogManagerMessageTest_MessagesForwarded_CountsMatch)
-    {
-        AzFramework::AssetSystem::AssetNotificationMessage testMessage;
-        AzFramework::AssetSystem::NetworkAssetUpdateInterface* notificationInterface = AZ::Interface<AzFramework::AssetSystem::NetworkAssetUpdateInterface>::Get();
-        EXPECT_NE(notificationInterface, nullptr);
-
-        AZ_TEST_START_TRACE_SUPPRESSION;
-        auto* mockCatalog = new ::testing::NiceMock<PlatformAddressedAssetCatalogMessageTest>(AzFramework::PlatformId::ANDROID_ID);
-        AZ_TEST_STOP_TRACE_SUPPRESSION(1); // Expected error not finding catalog
-        AZStd::unique_ptr< ::testing::NiceMock<PlatformAddressedAssetCatalogMessageTest>> catalogHolder;
-        catalogHolder.reset(mockCatalog);
-
-        m_platformAddressedAssetCatalogManager->TakeSingleCatalog(AZStd::move(catalogHolder));
-        EXPECT_CALL(*mockCatalog, AssetChanged(testing::_, false)).Times(0);
-        notificationInterface->AssetChanged({ testMessage });
-
-        testMessage.m_platform = "android";
-        EXPECT_CALL(*mockCatalog, AssetChanged(testing::_, false)).Times(1);
-        notificationInterface->AssetChanged({ testMessage });
-
-        testMessage.m_platform = "pc";
-        EXPECT_CALL(*mockCatalog, AssetChanged(testing::_, false)).Times(0);
-        notificationInterface->AssetChanged({ testMessage });
-
-        EXPECT_CALL(*mockCatalog, AssetRemoved(testing::_)).Times(0);
-        notificationInterface->AssetRemoved({ testMessage });
-
-        testMessage.m_platform = "android";
-        EXPECT_CALL(*mockCatalog, AssetRemoved(testing::_)).Times(1);
-        notificationInterface->AssetRemoved({ testMessage });
-    }
-
 }

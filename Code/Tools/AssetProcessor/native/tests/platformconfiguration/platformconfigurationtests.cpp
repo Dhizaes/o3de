@@ -122,14 +122,9 @@ TEST_F(PlatformConfigurationUnitTests, TestFailReadConfigFile_Regular_Platforms)
 
     // verify the data.
     ASSERT_NE(config.GetPlatformByIdentifier(AzToolsFramework::AssetSystem::GetHostAssetPlatform()), nullptr);
-    ASSERT_NE(config.GetPlatformByIdentifier("android"), nullptr);
     ASSERT_NE(config.GetPlatformByIdentifier("server"), nullptr);
 
-    ASSERT_TRUE(config.GetPlatformByIdentifier("android")->HasTag("mobile"));
-    ASSERT_TRUE(config.GetPlatformByIdentifier("android")->HasTag("renderer"));
-    ASSERT_TRUE(config.GetPlatformByIdentifier("android")->HasTag("android"));
     ASSERT_TRUE(config.GetPlatformByIdentifier("server")->HasTag("server"));
-    ASSERT_FALSE(config.GetPlatformByIdentifier("android")->HasTag("server"));
     ASSERT_FALSE(config.GetPlatformByIdentifier("server")->HasTag("renderer"));
 }
 

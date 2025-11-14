@@ -93,14 +93,7 @@ namespace AZ
 
         const char* ShaderPlatformInterface::GetAzslHeader([[maybe_unused]] const AssetBuilderSDK::PlatformInfo& platform) const
         {
-            if (platform.HasTag("mobile"))
-            {
-                return AZ_TRAIT_ATOM_MOBILE_AZSL_SHADER_HEADER;
-            }
-            else
-            {
-                return AZ_TRAIT_ATOM_AZSL_SHADER_HEADER;
-            }
+            return AZ_TRAIT_ATOM_AZSL_SHADER_HEADER;
         }
 
         // Takes in HLSL source file path and then compiles the HLSL to bytecode and
@@ -235,14 +228,7 @@ namespace AZ
             }
 
             AZStd::string prependFile;
-            if (platform.HasTag("mobile"))
-            {
-                prependFile = AZ_TRAIT_ATOM_MOBILE_AZSL_PLATFORM_HEADER;
-            }
-            else
-            {
-                prependFile = AZ_TRAIT_ATOM_AZSL_PLATFORM_HEADER;
-            }
+            prependFile = AZ_TRAIT_ATOM_AZSL_PLATFORM_HEADER;
 
             RHI::PrependArguments args;
             args.m_sourceFile = shaderSourceFile.c_str();

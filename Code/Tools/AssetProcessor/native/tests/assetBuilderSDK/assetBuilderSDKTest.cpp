@@ -23,9 +23,7 @@ namespace AssetProcessor
         ASSERT_EQ(createJobsRequest.GetEnabledPlatformsCount(), 1);
 
         createJobsRequest.m_enabledPlatforms = {
-            { "pc", {}
-            }, { "android", {}
-            }
+            { "pc", {} }
         };
         ASSERT_EQ(createJobsRequest.GetEnabledPlatformsCount(), 2);
     }

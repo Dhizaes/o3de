@@ -386,22 +386,14 @@ mac_wait_for_connect=0
         , AZStd::fixed_vector<ConfigFileParams::SettingsKeyValuePair, 20>{
             ConfigFileParams::SettingsKeyValuePair{"/project_path", AZStd::string_view{"TestProject"}},
             ConfigFileParams::SettingsKeyValuePair{"/remote_filesystem", AZ::s64{0}},
-            ConfigFileParams::SettingsKeyValuePair{"/android_remote_filesystem", AZ::s64{0}},
-            ConfigFileParams::SettingsKeyValuePair{"/ios_remote_filesystem", AZ::s64{0}},
             ConfigFileParams::SettingsKeyValuePair{"/mac_remote_filesystem", AZ::s64{0}},
             ConfigFileParams::SettingsKeyValuePair{"/assets", AZStd::string_view{"pc"}},
-            ConfigFileParams::SettingsKeyValuePair{"/android_assets", AZStd::string_view{"android"}},
-            ConfigFileParams::SettingsKeyValuePair{"/ios_assets", AZStd::string_view{"ios"}},
             ConfigFileParams::SettingsKeyValuePair{"/mac_assets", AZStd::string_view{"mac"}},
             ConfigFileParams::SettingsKeyValuePair{"/connect_to_remote", AZ::s64{0}},
             ConfigFileParams::SettingsKeyValuePair{"/windows_connect_to_remote", AZ::s64{1}},
-            ConfigFileParams::SettingsKeyValuePair{"/android_connect_to_remote", AZ::s64{0}},
-            ConfigFileParams::SettingsKeyValuePair{"/ios_connect_to_remote", AZ::s64{0}},
             ConfigFileParams::SettingsKeyValuePair{"/mac_connect_to_remote", AZ::s64{0}},
             ConfigFileParams::SettingsKeyValuePair{"/wait_for_connect", AZ::s64{0}},
             ConfigFileParams::SettingsKeyValuePair{"/windows_wait_for_connect", AZ::s64{1}},
-            ConfigFileParams::SettingsKeyValuePair{"/android_wait_for_connect", AZ::s64{0}},
-            ConfigFileParams::SettingsKeyValuePair{"/ios_wait_for_connect", AZ::s64{0}},
             ConfigFileParams::SettingsKeyValuePair{"/mac_wait_for_connect", AZ::s64{0}},
         }},
         // Parses a fake AssetProcessorPlatformConfig file which contains sections headers
@@ -430,19 +422,11 @@ test_asset_processor_tag = test_value
 [Platform pc]
 tags=tools,renderer,dx12,vulkan
 
-[Platform android]
-tags=android,mobile,renderer,vulkan ; With Comments at the end
-
-[Platform ios]
-tags=mobile,renderer,metal
-
 [Platform mac]
 tags=tools,renderer,metal)"
         , AZStd::fixed_vector<ConfigFileParams::SettingsKeyValuePair, 20>{
             ConfigFileParams::SettingsKeyValuePair{"/test_asset_processor_tag", AZStd::string_view{"test_value"}},
             ConfigFileParams::SettingsKeyValuePair{"/Platform pc/tags", AZStd::string_view{"tools,renderer,dx12,vulkan"}},
-            ConfigFileParams::SettingsKeyValuePair{"/Platform android/tags", AZStd::string_view{"android,mobile,renderer,vulkan"}},
-            ConfigFileParams::SettingsKeyValuePair{"/Platform ios/tags", AZStd::string_view{"mobile,renderer,metal"}},
             ConfigFileParams::SettingsKeyValuePair{"/Platform mac/tags", AZStd::string_view{"tools,renderer,metal"}},
         }}
         )

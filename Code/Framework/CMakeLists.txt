@@ -6,7 +6,6 @@
 #
 #
 
-add_subdirectory(AzAndroid)
 add_subdirectory(AtomCore)
 add_subdirectory(AzCore)
 add_subdirectory(AzQtComponents)

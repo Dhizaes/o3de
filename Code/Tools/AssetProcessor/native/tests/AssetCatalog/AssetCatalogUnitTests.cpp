@@ -225,7 +225,6 @@ namespace AssetProcessor
         void BuildConfig(const QDir& tempPath, AssetDatabaseConnection* dbConn, PlatformConfiguration& config)
         {
             config.EnablePlatform({ "pc" ,{ "desktop", "renderer" } }, true);
-            config.EnablePlatform({ "android" ,{ "mobile", "renderer" } }, true);
             config.EnablePlatform({ "fandango" ,{ "console", "renderer" } }, false);
             AZStd::vector<AssetBuilderSDK::PlatformInfo> platforms;
             config.PopulatePlatformsForScanFolder(platforms);

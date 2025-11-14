@@ -8,6 +8,4 @@
 
 #pragma once
 
-#include "PlatformSettings_Android.h"
 #include "PlatformSettings_Base.h"
-#include "PlatformSettings_Ios.h"

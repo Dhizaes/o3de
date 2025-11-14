@@ -73,10 +73,6 @@
 #define ENABLE_PARALLAX					1
 #endif
 
-#ifndef ENABLE_MOBILEBRDF
-#define ENABLE_MOBILEBRDF               0
-#endif
-
 // --- Shader Options ---
 
 option bool o_specularF0_enableMultiScatterCompensation = true;

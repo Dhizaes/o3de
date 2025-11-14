@@ -415,8 +415,8 @@ namespace O3DE::ProjectManager
 
             using Plat = GemInfo::Platform;
             gemA.m_platforms = Plat::Windows;
-            gemB.m_platforms = Plat::Android | Plat::iOS;
-            gemC.m_platforms = Plat::Android | Plat::iOS | Plat::Linux | Plat::macOS | Plat::Windows; 
+            gemB.m_platforms = 0;
+            gemC.m_platforms = Plat::Linux | Plat::macOS | Plat::Windows; 
 
             gemA.m_features = QStringList({ "Audio", "Framework", "SDK" });
             gemB.m_features = QStringList({ "Framework", "Tools", "UI" });
@@ -521,27 +521,11 @@ namespace O3DE::ProjectManager
         EXPECT_FALSE(m_proxyModel->filterAcceptsRow(m_gemRows[MobileUX], QModelIndex()));
         EXPECT_TRUE(m_proxyModel->filterAcceptsRow(m_gemRows[CityProps], QModelIndex()));
 
-        m_proxyModel->SetPlatforms(GemInfo::Platform::Android);
-
-        EXPECT_TRUE(m_proxyModel->GetPlatforms() == GemInfo::Platform::Android);
-        EXPECT_FALSE(m_proxyModel->filterAcceptsRow(m_gemRows[DefaultAudio], QModelIndex()));
-        EXPECT_TRUE(m_proxyModel->filterAcceptsRow(m_gemRows[MobileUX], QModelIndex()));
-        EXPECT_TRUE(m_proxyModel->filterAcceptsRow(m_gemRows[CityProps], QModelIndex()));
-
         m_proxyModel->SetPlatforms(GemInfo::Platform::macOS);
 
         EXPECT_TRUE(m_proxyModel->GetPlatforms() == GemInfo::Platform::macOS);
         EXPECT_FALSE(m_proxyModel->filterAcceptsRow(m_gemRows[DefaultAudio], QModelIndex()));
         EXPECT_FALSE(m_proxyModel->filterAcceptsRow(m_gemRows[MobileUX], QModelIndex()));
-        EXPECT_TRUE(m_proxyModel->filterAcceptsRow(m_gemRows[CityProps], QModelIndex()));
-    }
-
-    TEST_F(GemCatalogMiscFilterTests, GemCatalogFilters_FilterMultiplePlatforms_ShowsMultiplePlatformMatches)
-    {
-        m_proxyModel->SetPlatforms(GemInfo::Platform::Android | GemInfo::Platform::iOS);
-
-        EXPECT_FALSE(m_proxyModel->filterAcceptsRow(m_gemRows[DefaultAudio], QModelIndex()));
-        EXPECT_TRUE(m_proxyModel->filterAcceptsRow(m_gemRows[MobileUX], QModelIndex()));
         EXPECT_TRUE(m_proxyModel->filterAcceptsRow(m_gemRows[CityProps], QModelIndex()));
     }
 

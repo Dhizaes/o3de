@@ -428,32 +428,6 @@
       "CMAKE_TARGET": "install"
     }
   },
-  "install_mono_android_api_24_profile": {
-    "TAGS": [],
-    "PIPELINE_ENV": {
-      "NODE_LABEL":"ubuntu-22-packaging"
-    },
-    "COMMAND": "build_linux.sh",
-    "PARAMETERS": {
-      "CONFIGURATION": "profile",
-      "OUTPUT_DIRECTORY": "build/android_api_mono",
-      "CMAKE_OPTIONS":"-G 'Ninja Multi-Config' -DCMAKE_TOOLCHAIN_FILE=cmake/Platform/Android/Toolchain_android.cmake -DLY_MONOLITHIC_GAME=TRUE -DLY_DISABLE_TEST_MODULES=TRUE -DANDROID_NATIVE_API_LEVEL=24 -DLY_NDK_DIR=\"${LY_NDK_DIR}\"",
-      "CMAKE_TARGET": "install"
-    }
-  },
-  "install_mono_android_api_24_release": {
-    "TAGS": [],
-    "PIPELINE_ENV": {
-      "NODE_LABEL":"ubuntu-22-packaging"
-    },
-    "COMMAND": "build_linux.sh",
-    "PARAMETERS": {
-      "CONFIGURATION": "release",
-      "OUTPUT_DIRECTORY": "build/android_api_mono",
-      "CMAKE_OPTIONS":"-G 'Ninja Multi-Config' -DCMAKE_TOOLCHAIN_FILE=cmake/Platform/Android/Toolchain_android.cmake -DLY_MONOLITHIC_GAME=TRUE -DLY_DISABLE_TEST_MODULES=TRUE -DANDROID_NATIVE_API_LEVEL=24 -DLY_NDK_DIR=\"${LY_NDK_DIR}\"",
-      "CMAKE_TARGET": "install"
-    }
-  },
   "installer_pipe": {
     "TAGS": [
       "periodic-clean-weekly-internal",
@@ -461,7 +435,6 @@
     ],
     "steps": [
       "install_mono_22_release",
-      "install_mono_android_api_24_release",
       "installer"
     ]
   },

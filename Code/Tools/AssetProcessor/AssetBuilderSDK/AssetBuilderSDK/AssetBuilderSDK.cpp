@@ -87,14 +87,6 @@ namespace AssetBuilderSDK
         {
             return AssetBuilderSDK::Platform_LINUX;
         }
-        if (azstricmp(newPlatformName, "android") == 0)
-        {
-            return AssetBuilderSDK::Platform_ANDROID;
-        }
-        if (azstricmp(newPlatformName, "ios") == 0)
-        {
-            return AssetBuilderSDK::Platform_IOS;
-        }
         if (azstricmp(newPlatformName, "mac") == 0)
         {
             return AssetBuilderSDK::Platform_MAC;
@@ -124,10 +116,6 @@ namespace AssetBuilderSDK
         {
         case AssetBuilderSDK::Platform_PC:
             return "pc";
-        case AssetBuilderSDK::Platform_ANDROID:
-            return "android";
-        case AssetBuilderSDK::Platform_IOS:
-            return "ios";
         case AssetBuilderSDK::Platform_MAC:
             return "mac";
         case AssetBuilderSDK::Platform_PROVO:

@@ -15,13 +15,9 @@ set(FILES
     LastPathBus.h
     Platforms.h
     PlatformSettings.h
-    PlatformSettings_Android.cpp
-    PlatformSettings_Android.h
     PlatformSettings_Base.cpp
     PlatformSettings_Base.h
     PlatformSettings_common.h
-    PlatformSettings_Ios.cpp
-    PlatformSettings_Ios.h
     PlistDictionary.cpp
     PlistDictionary.h
     ProjectSettingsContainer.cpp

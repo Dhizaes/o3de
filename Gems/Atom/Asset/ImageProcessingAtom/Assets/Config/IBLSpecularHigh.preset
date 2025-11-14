@@ -27,50 +27,6 @@
             }
         },
         "PlatformsPresets": {
-            "android": {
-                "UUID": "{B66395E1-8D0E-4159-989B-FC2B9F091B75}",
-                "Name": "IBLSpecularHigh",
-                "SourceColor": "Linear",
-                "DestColor": "Linear",
-                "SuppressEngineReduce": true,
-                "PixelFormat": "R9G9B9E5",
-                "DiscardAlpha": true,
-                "MinTextureSize": 512,
-                "MaxTextureSize": 512,
-                "IsPowerOf2": true,
-                "CubemapSettings": {
-                    "Filter": "GGX",
-                    "MipAngle": 7.0,
-                    "MipSlope": 2.299999952316284,
-                    "EdgeFixup": -431602080.0,
-                    "SubId": 2000
-                },
-                "MipMapSetting": {
-                    "MipGenType": "Box"
-                }
-            },
-            "ios": {
-                "UUID": "{B66395E1-8D0E-4159-989B-FC2B9F091B75}",
-                "Name": "IBLSpecularHigh",
-                "SourceColor": "Linear",
-                "DestColor": "Linear",
-                "SuppressEngineReduce": true,
-                "PixelFormat": "R9G9B9E5",
-                "DiscardAlpha": true,
-                "MinTextureSize": 512,
-                "MaxTextureSize": 512,
-                "IsPowerOf2": true,
-                "CubemapSettings": {
-                    "Filter": "GGX",
-                    "MipAngle": 7.0,
-                    "MipSlope": 2.299999952316284,
-                    "EdgeFixup": -431602080.0,
-                    "SubId": 2000
-                },
-                "MipMapSetting": {
-                    "MipGenType": "Box"
-                }
-            },
             "mac": {
                 "UUID": "{B66395E1-8D0E-4159-989B-FC2B9F091B75}",
                 "Name": "IBLSpecularHigh",

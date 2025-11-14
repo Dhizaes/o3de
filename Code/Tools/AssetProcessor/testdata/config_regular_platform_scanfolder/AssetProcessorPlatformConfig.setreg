@@ -5,12 +5,6 @@
                 "Platform pc": {
                     "tags": "tools,renderer"
                 },
-                "Platform android": {
-                    "tags": "android,mobile,renderer"
-                },
-                "Platform ios": {
-                    "tags": "mobile,renderer"
-                },
                 "Platform mac": {
                     "tags": "tools,renderer"
                 },
@@ -24,8 +18,6 @@
                     "tags": "console,renderer"
                 },
                 "Platforms": {
-                    "android": "enabled",
-                    "ios": "enabled",
                     "server": "enabled"
                 },
                 "Jobs": {
@@ -49,22 +41,19 @@
                     "display": "editoroutput",
                     "recursive": 1,
                     "order": 30000,
-                    "include": "tools,renderer",
-                    "exclude": "ios"
+                    "include": "tools,renderer"
                 },
                 "ScanFolder Folder1": {
                     "watch": "@ENGINEROOT@/Folder1",
                     "display": "folder1output",
                     "recursive": 1,
-                    "order": 50000,
-                    "include": "android"
+                    "order": 50000
                 },
                 "ScanFolder Folder2": {
                     "watch": "@ENGINEROOT@/Folder2",
                     "display": "folder2output",
                     "recursive": 1,
-                    "order": 60000,
-                    "exclude": "android"
+                    "order": 60000
                 },
                 "ScanFolder Folder3": {
                     "watch": "@ENGINEROOT@/Folder3",
@@ -83,7 +72,6 @@
                     "glob": "*.i_caf",
                     "params": "defaultparams",
                     "server": "skip",
-                    "android": "mobile",
                     "test": "copy",
                     "priority": 5
                 },
@@ -95,7 +83,6 @@
                 "RC mov": {
                     "glob": "*.mov",
                     "params": "copy",
-                    "android": "platformspecificoverride",
                     "renderer": "rendererparams"
                 },
                 "RC rend": {

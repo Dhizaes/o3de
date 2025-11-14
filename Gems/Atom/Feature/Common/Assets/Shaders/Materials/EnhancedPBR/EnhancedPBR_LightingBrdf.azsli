@@ -67,11 +67,7 @@ real3 GetSpecularLighting_EnhancedPBR(Surface surface, LightingData lightingData
     }
     else
     {
-#if ENABLE_MOBILEBRDF
-        specular = SpecularGGXMobile(lightingData.dirToCamera[viewIndex], dirToLight, surface.GetSpecularNormal(), surface.GetSpecularF0(), surface.roughnessA2, surface.roughnessA, surface.roughnessLinear);
-#else
         specular = SpecularGGX(lightingData.dirToCamera[viewIndex], dirToLight, surface.GetSpecularNormal(), surface.GetSpecularF0(), lightingData.GetSpecularNdotV(viewIndex), surface.roughnessA2, lightingData.multiScatterCompensation);
-#endif
     }
 
 #if ENABLE_CLEAR_COAT

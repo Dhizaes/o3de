@@ -18,36 +18,6 @@
             }
         },
         "PlatformsPresets": {
-            "android": {
-                "UUID": "{6EE749F4-846E-4F7A-878C-F211F85EA59F}",
-                "Name": "NormalsWithSmoothness",
-                "SourceColor": "Linear",
-                "DestColor": "Linear",
-                "PixelFormat": "ASTC_4x4",
-                "PixelFormatAlpha": "ASTC_4x4",
-                "MaxTextureSize": 512,
-                "IsPowerOf2": true,
-                "GlossFromNormal": 1,
-                "MipRenormalize": true,
-                "MipMapSetting": {
-                    "MipGenType": "Box"
-                }
-            },
-            "ios": {
-                "UUID": "{6EE749F4-846E-4F7A-878C-F211F85EA59F}",
-                "Name": "NormalsWithSmoothness",
-                "SourceColor": "Linear",
-                "DestColor": "Linear",
-                "PixelFormat": "ASTC_4x4",
-                "PixelFormatAlpha": "ASTC_4x4",
-                "MaxTextureSize": 512,
-                "IsPowerOf2": true,
-                "GlossFromNormal": 1,
-                "MipRenormalize": true,
-                "MipMapSetting": {
-                    "MipGenType": "Box"
-                }
-            },
             "mac": {
                 "UUID": "{6EE749F4-846E-4F7A-878C-F211F85EA59F}",
                 "Name": "NormalsWithSmoothness",

@@ -63,19 +63,6 @@ public:
 
         {
             RCJob* job = new RCJob(m_rcJobListModel);
-            AssetProcessor::JobDetails jobDetails;
-            jobDetails.m_jobEntry.m_computedFingerprint = 1;
-            jobDetails.m_jobEntry.m_sourceAssetReference = AssetProcessor::SourceAssetReference("c:/somepath/failed.dds");
-            jobDetails.m_jobEntry.m_platformInfo = { "ios",{ "mobile", "renderer" } };
-            jobDetails.m_jobEntry.m_jobRunKey = 1;
-            jobDetails.m_jobEntry.m_jobKey = "tiff";
-            job->SetState(RCJob::JobState::pending);
-            job->Init(jobDetails);
-            m_rcJobListModel->addNewJob(job);
-        }
-
-        {
-            RCJob* job = new RCJob(m_rcJobListModel);
             // note that Init() is a move operation.  we cannot reuse jobDetails.
             AssetProcessor::JobDetails jobDetails;
             jobDetails.m_jobEntry.m_computedFingerprint = 1;

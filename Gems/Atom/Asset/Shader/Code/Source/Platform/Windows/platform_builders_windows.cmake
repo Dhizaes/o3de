@@ -53,24 +53,6 @@ ly_add_target_files(
 ly_add_target_files(
    TARGETS ${gem_name}.Builders
    FILES 
-       ${CMAKE_CURRENT_SOURCE_DIR}/AZSL/Platform/iOS/Metal/AzslcHeader.azsli
-       ${CMAKE_CURRENT_SOURCE_DIR}/AZSL/Platform/iOS/Metal/PlatformHeader.hlsli
-   OUTPUT_SUBDIRECTORY
-       Builders/ShaderHeaders/Platform/iOS/Metal
-)
-
-ly_add_target_files(
-   TARGETS ${gem_name}.Builders
-   FILES 
-       ${CMAKE_CURRENT_SOURCE_DIR}/AZSL/Platform/Android/Vulkan/AzslcHeader.azsli
-       ${CMAKE_CURRENT_SOURCE_DIR}/AZSL/Platform/Android/Vulkan/PlatformHeader.hlsli
-   OUTPUT_SUBDIRECTORY
-       Builders/ShaderHeaders/Platform/Android/Vulkan
-)
-
-ly_add_target_files(
-   TARGETS ${gem_name}.Builders
-   FILES 
        ${CMAKE_CURRENT_SOURCE_DIR}/AZSL/Platform/Linux/Vulkan/AzslcHeader.azsli
        ${CMAKE_CURRENT_SOURCE_DIR}/AZSL/Platform/Linux/Vulkan/PlatformHeader.hlsli
    OUTPUT_SUBDIRECTORY

@@ -14,18 +14,12 @@
 #include <AzCore/std/string/fixed_string.h>
 #include <AzCore/std/string/string_view.h>
 
-// On IOS builds IOS will be defined and interfere with the below enums
-#pragma push_macro("IOS")
-#undef IOS
-
 namespace AZ
 {
     inline namespace PlatformDefaults
     {
         constexpr char PlatformPC[] = "pc";
         constexpr char PlatformLinux[] = "linux";
-        constexpr char PlatformAndroid[] = "android";
-        constexpr char PlatformIOS[] = "ios";
         constexpr char PlatformMac[] = "mac";
         constexpr char PlatformProvo[] = "provo";
         constexpr char PlatformSalem[] = "salem";
@@ -34,8 +28,6 @@ namespace AZ
 
         constexpr char PlatformCodeNameWindows[] = "Windows";
         constexpr char PlatformCodeNameLinux[] = "Linux";
-        constexpr char PlatformCodeNameAndroid[] = "Android";
-        constexpr char PlatformCodeNameiOS[] = "iOS";
         constexpr char PlatformCodeNameMac[] = "Mac";
         constexpr char PlatformCodeNameProvo[] = "Provo";
         constexpr char PlatformCodeNameSalem[] = "Salem";
@@ -52,8 +44,6 @@ namespace AZ
             (Invalid, -1),
             PC,
             LINUX_ID,
-            ANDROID_ID,
-            IOS,
             MAC_ID,
             PROVO,
             SALEM,
@@ -72,8 +62,6 @@ namespace AZ
             Platform_NONE = 0x00,
             Platform_PC = 1 << PlatformId::PC,
             Platform_LINUX = 1 << PlatformId::LINUX_ID,
-            Platform_ANDROID = 1 << PlatformId::ANDROID_ID,
-            Platform_IOS = 1 << PlatformId::IOS,
             Platform_MAC = 1 << PlatformId::MAC_ID,
             Platform_PROVO = 1 << PlatformId::PROVO,
             Platform_SALEM = 1 << PlatformId::SALEM,
@@ -86,9 +74,9 @@ namespace AZ
             // A special platform that will always correspond to all non-server platforms, even if new ones are added
             Platform_ALL_CLIENT = 1ULL << 31,
 
-            AllNamedPlatforms = Platform_PC | Platform_LINUX | Platform_ANDROID | Platform_IOS | Platform_MAC | Platform_PROVO | Platform_SALEM | Platform_JASPER | Platform_SERVER,
+            AllNamedPlatforms = Platform_PC | Platform_LINUX | Platform_MAC | Platform_PROVO | Platform_SALEM | Platform_JASPER | Platform_SERVER,
 
-            UnrestrictedPlatforms = Platform_PC | Platform_LINUX | Platform_ANDROID | Platform_IOS | Platform_MAC | Platform_SERVER,
+            UnrestrictedPlatforms = Platform_PC | Platform_LINUX | Platform_MAC | Platform_SERVER,
         };
 
         AZ_DEFINE_ENUM_BITWISE_OPERATORS(PlatformFlags);
@@ -155,4 +143,3 @@ namespace AZ
         };
     }
 }
-#pragma pop_macro("IOS")

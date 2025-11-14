@@ -28,12 +28,6 @@ set(FILES
     Materials/Pipelines/MainPipeline/MainPipelineScript.lua
     Materials/Pipelines/MainPipeline/Transparent_EnhancedLighting.azsli
     Materials/Pipelines/MainPipeline/Transparent_StandardLighting.azsli
-    Materials/Pipelines/Mobile/ForwardPass_BaseLighting.azsli
-    Materials/Pipelines/Mobile/ForwardPass_StandardLighting.azsli
-    Materials/Pipelines/Mobile/ForwardPass_StandardLighting_CustomZ.azsli
-    Materials/Pipelines/Mobile/MobileForwardPassVertexAndPixel.azsli
-    Materials/Pipelines/Mobile/MobilePipelineScript.lua
-    Materials/Pipelines/Mobile/Transparent_StandardLighting.azsli
     Materials/Pipelines/MultiView/ForwardPass_BaseLighting.azsli
     Materials/Pipelines/MultiView/ForwardPass_StandardLighting.azsli
     Materials/Pipelines/MultiView/ForwardPass_StandardLighting_CustomZ.azsli
@@ -161,19 +155,6 @@ set(FILES
     Passes/MainPipeline.pass
     Passes/MainPipelineRenderToTexture.pass
     Passes/MeshMotionVector.pass
-    Passes/Mobile/DeferredFog.pass
-    Passes/Mobile/DisplayMapper.pass
-    Passes/Mobile/Forward.pass
-    Passes/Mobile/Pipeline.pass
-    Passes/Mobile/PostProcessParent.pass
-    Passes/Mobile/ShadowParent.pass
-    Passes/Mobile/SkyBox.pass
-    Passes/Mobile/Subpass1Parent.pass
-    Passes/Mobile/Subpass2Parent.pass
-    Passes/Mobile/Subpass3Parent.pass
-    Passes/Mobile/SubpassesParent.pass
-    Passes/Mobile/Transparent.pass
-    Passes/Mobile/TransparentParent.pass
     Passes/ModulateTexture.pass
     Passes/MorphTarget.pass
     Passes/MotionBlur.pass
@@ -212,14 +193,12 @@ set(FILES
     Passes/ReflectionScreenSpace.pass
     Passes/ReflectionScreenSpaceBlur.pass
     Passes/ReflectionScreenSpaceBlurHorizontal.pass
-    Passes/ReflectionScreenSpaceBlurMobile.pass
     Passes/ReflectionScreenSpaceBlurVertical.pass
     Passes/ReflectionScreenSpaceComposite.pass
     Passes/ReflectionScreenSpaceCopyHistory.pass
     Passes/ReflectionScreenSpaceDownsampleDepthLinear.pass
     Passes/ReflectionScreenSpaceDownsampleDepthLinearChild.pass
     Passes/ReflectionScreenSpaceFilter.pass
-    Passes/ReflectionScreenSpaceMobile.pass
     Passes/ReflectionScreenSpaceRayTracing.pass
     Passes/ReflectionScreenSpaceTrace.pass
     Passes/ShadowParent.pass
@@ -611,7 +590,6 @@ set(FILES
     Shaders/PostProcessing/NewDepthOfFieldTileReduce.shader
     Shaders/PostProcessing/OutputTransform.azsl
     Shaders/PostProcessing/OutputTransform.shader
-    Shaders/PostProcessing/OutputTransformMobile.shader
     Shaders/PostProcessing/PaniniProjection.azsl
     Shaders/PostProcessing/PaniniProjection.shader
     Shaders/PostProcessing/ScreenSpaceSubsurfaceScatteringCS.azsl
@@ -679,7 +657,6 @@ set(FILES
     Shaders/SceneMaterialSrg.shader
     Shaders/ScreenSpace/DeferredFog.azsl
     Shaders/ScreenSpace/DeferredFog.shader
-    Shaders/ScreenSpace/MobileDeferredFog.shader
     Shaders/Shadow/ClearShadow.shader
     Shaders/Shadow/ClearShadowmap.azsl
     Shaders/Shadow/DepthExponentiation.azsl

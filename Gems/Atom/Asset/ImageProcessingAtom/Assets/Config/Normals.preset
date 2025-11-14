@@ -17,34 +17,6 @@
             }
         },
         "PlatformsPresets": {
-            "android": {
-                "UUID": "{508B21D5-5250-4003-97EC-1CF28D571ACF}",
-                "Name": "Normals",
-                "SourceColor": "Linear",
-                "DestColor": "Linear",
-                "PixelFormat": "ASTC_4x4",
-                "DiscardAlpha": true,
-                "MaxTextureSize": 512,
-                "IsPowerOf2": true,
-                "MipRenormalize": true,
-                "MipMapSetting": {
-                    "MipGenType": "Box"
-                }
-            },
-            "ios": {
-                "UUID": "{508B21D5-5250-4003-97EC-1CF28D571ACF}",
-                "Name": "Normals",
-                "SourceColor": "Linear",
-                "DestColor": "Linear",
-                "PixelFormat": "ASTC_4x4",
-                "DiscardAlpha": true,
-                "MaxTextureSize": 512,
-                "IsPowerOf2": true,
-                "MipRenormalize": true,
-                "MipMapSetting": {
-                    "MipGenType": "Box"
-                }
-            },
             "mac": {
                 "UUID": "{508B21D5-5250-4003-97EC-1CF28D571ACF}",
                 "Name": "Normals",

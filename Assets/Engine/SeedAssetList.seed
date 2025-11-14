@@ -12,27 +12,6 @@
         },
         {
             "assetId": {
-                "guid": "{1103CB60-BE8D-56C0-AE9D-98EF531C7106}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/gpu/android_gpus.xml"
-        },
-        {
-            "assetId": {
-                "guid": "{AD7E02A2-5658-5138-95F2-47347A9C1BE1}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/gpu/android_models.xml"
-        },
-        {
-            "assetId": {
-                "guid": "{7646BFFB-B94B-5593-8669-9B387B4669D6}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/gpu/ios_models.xml"
-        },
-        {
-            "assetId": {
                 "guid": "{F408D747-032E-5409-BBDF-2C4AAA5FD385}"
             },
             "platformFlags": 255,
@@ -130,76 +109,6 @@
             },
             "platformFlags": 255,
             "pathHint": "config/cvargroups/sys_spec_full.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{FD38C182-1AFC-514C-99E5-BB1AB60C4A31}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/android_high.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{A81A509B-C473-583A-9675-AC159B274231}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/android_high_nogmem.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{08D52EFB-D7FB-5266-905F-1599F8D29C77}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/android_low.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{78605B06-1772-5B60-AEF4-4F5DD3AAA665}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/android_malit760.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{9452506B-6F3D-5907-B631-78AD00C7A555}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/android_medium.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{E68C7CB3-DE0B-5A2C-914B-F2E50F48D4F3}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/android_veryhigh.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{6971FAB8-2ABE-5830-AE34-081B35970662}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/ios_high.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{ECFC3EF0-4B9D-504B-8DC6-231CA22E2EDB}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/ios_low.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{3B603071-F68A-515F-BE93-7592E08EA56B}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/ios_medium.cfg"
-        },
-        {
-            "assetId": {
-                "guid": "{7DC7B81A-6E95-567E-8BBA-30957B97312A}"
-            },
-            "platformFlags": 255,
-            "pathHint": "config/spec/ios_veryhigh.cfg"
         },
         {
             "assetId": {

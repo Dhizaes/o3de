@@ -44,12 +44,6 @@
                 "Platform linux": {
                     "tags": "tools,renderer,vulkan,null"
                 },
-                "Platform android": {
-                    "tags": "android,mobile,renderer,vulkan"
-                },
-                "Platform ios": {
-                    "tags": "mobile,renderer,metal"
-                },
                 "Platform mac": {
                     "tags": "tools,renderer,metal,null"
                 },
@@ -63,8 +57,6 @@
                 // To enable any additional platform, just uncomment the appropriate line below.
                 "Platforms": {
                     //"pc": "enabled",
-                    //"android": "enabled",
-                    //"ios": "enabled",
                     //"mac": "enabled",
                     //"server": "enabled"
                 },

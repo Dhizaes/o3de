@@ -205,23 +205,6 @@ namespace AssetBundler
                     return true;
                 });
             }
-
-            AZ::IO::Path iosDirectory = platformsDirectory / AzFramework::PlatformIOS;
-            if (m_data->m_localFileIO->Exists(iosDirectory.c_str()))
-            {
-                bool recurse = true;
-                AZ::Outcome<AZStd::list<AZStd::string>, AZStd::string> result = AzFramework::FileFunc::FindFileList(iosDirectory.Native(),
-                    AZStd::string::format("*.%s", AzToolsFramework::AssetSeedManager::GetSeedFileExtension()).c_str(), recurse);
-
-                if (result.IsSuccess())
-                {
-                    AZStd::list<AZStd::string> seedFiles = result.TakeValue();
-                    for (AZStd::string& seedFile : seedFiles)
-                    {
-                        m_data->m_gemSeedFilePairList.push_back({ AZ::IO::PathView(seedFile).LexicallyNormal().String(), seedFileExists });
-                    }
-                }
-            }
         }
 
         struct StaticData

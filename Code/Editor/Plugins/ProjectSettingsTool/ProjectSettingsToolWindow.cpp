@@ -37,17 +37,6 @@ namespace ProjectSettingsTool
 {
     namespace
     {
-        const char* const IosSettingsPListPaths[] = {
-            "Resources/Platform/iOS/Info.plist",
-
-            // legacy paths
-            "Gem/Resources/Platform/iOS/Info.plist",
-            "Gem/Resources/IOSLauncher/Info.plist"
-        };
-
-        const char* const AndroidSettingsJsonPath = "Platform/Android/android_project.json";
-        const char* const AndroidSettingsJsonValueString = "android_settings";
-
         bool g_serializeRegistered = false;
     }
 
@@ -67,16 +56,6 @@ namespace ProjectSettingsTool
         , m_invalidState(false)
     {
         ProjectSettingsContainer::PlatformResources platformResources;
-
-        if (PlatformEnabled(PlatformId::Ios))
-        {
-            platformResources.emplace_back(PlatformId::Ios, GetPlatformResource(PlatformId::Ios));
-        }
-
-        if (PlatformEnabled(PlatformId::Android))
-        {
-            platformResources.emplace_back(PlatformId::Android, GetPlatformResource(PlatformId::Android));
-        }
 
         // Creates settings container to handle settings of all platforms
         m_settingsContainer = AZStd::make_unique<ProjectSettingsContainer>(m_projectRoot + "/project.json", platformResources);
@@ -105,17 +84,6 @@ namespace ProjectSettingsTool
 
         LoadPropertiesFromSettings();
         m_linkHandler->LinkAllProperties();
-
-        // Hide the iOS tab if that platform is not enabled.
-        if (!PlatformEnabled(PlatformId::Ios))
-        {
-            m_ui->platformTabs->removeTab(m_ui->platformTabs->indexOf(m_ui->iosTab));
-        }
-        // Hide the Android tab if that platform is not enabled.
-        if (!PlatformEnabled(PlatformId::Android))
-        {
-            m_ui->platformTabs->removeTab(m_ui->platformTabs->indexOf(m_ui->androidTab));
-        }
     }
 
     ProjectSettingsToolWindow::~ProjectSettingsToolWindow()
@@ -149,8 +117,6 @@ namespace ProjectSettingsTool
         AZ::ComponentApplicationBus::BroadcastResult(context, &AZ::ComponentApplicationRequests::GetSerializeContext);
 
         BaseSettings::Reflect(context);
-        AndroidSettings::Reflect(context);
-        IosSettings::Reflect(context);
     }
 
     void ProjectSettingsToolWindow::RegisterHandlersAndBusses()
@@ -399,16 +365,6 @@ namespace ProjectSettingsTool
             dataForPropertyEditor = &m_platformProperties.base;
             dataTypeID = m_platformProperties.base.TYPEINFO_Uuid();
             break;
-        case PlatformId::Android:
-            parent = m_ui->androidTab;
-            dataForPropertyEditor = &m_platformProperties.android;
-            dataTypeID = m_platformProperties.android.TYPEINFO_Uuid();
-            break;
-        case PlatformId::Ios:
-            parent = m_ui->iosTab;
-            dataForPropertyEditor = &m_platformProperties.ios;
-            dataTypeID = m_platformProperties.ios.TYPEINFO_Uuid();
-            break;
         default:
             AZ_Assert(false, "Cannot add unknown platform to ui.");
         }
@@ -455,61 +411,6 @@ namespace ProjectSettingsTool
                     &m_settingsContainer->GetProjectJsonDocument()
                 ));
             break;
-        case PlatformId::Android:
-        {
-            auto* androidSettings = m_settingsContainer->GetPlatformData(plat);
-            if (!androidSettings ||
-                !AZStd::holds_alternative<ProjectSettingsContainer::JsonSettings>(*androidSettings))
-            {
-                QMessageBox::critical
-                (
-                    this,
-                    "Critical",
-                    "Android settings is invalid. Project Settings Tool must close.",
-                    QMessageBox::Abort
-                );
-                ForceClose();
-            }
-            auto& androidJSonSettings = AZStd::get<ProjectSettingsContainer::JsonSettings>(*androidSettings);
-
-            m_platformPropertyEditors[platIdValue]->EnumerateInstances(AZStd::bind
-            (
-                &ProjectSettingsToolWindow::MakeSerializerJsonNonRoot,
-                this,
-                plat,
-                AZStd::placeholders::_1,
-                androidJSonSettings.m_document.get(),
-                ProjectSettingsContainer::GetJsonValue(*androidJSonSettings.m_document, AndroidSettingsJsonValueString).GetValue()
-            ));
-            break;
-        }
-        case PlatformId::Ios:
-        {
-            AZStd::unique_ptr<PlistDictionary> dict = m_settingsContainer->CreatePlistDictionary(plat);
-            if (!dict)
-            {
-                QMessageBox::critical
-                (
-                    this,
-                    "Critical",
-                    "Ios pList is invalid. Project Settings Tool must close.",
-                    QMessageBox::Abort
-                );
-                ForceClose();
-            }
-
-            m_platformPropertyEditors[platIdValue]->EnumerateInstances(AZStd::bind
-            (
-                &ProjectSettingsToolWindow::MakeSerializerPlist,
-                this,
-                plat,
-                AZStd::placeholders::_1,
-                // All arguments must be copy constructible so this must be released,
-                // MakeSerializerPlist creates a unique pointer with dict and Serializer will own it.
-                dict.release()
-            ));
-            break;
-        }
         default:
             AZ_Assert(false, "Cannot make serializer for unknown platform.");
             break;
@@ -675,48 +576,13 @@ namespace ProjectSettingsTool
         }
     }
 
-    bool ProjectSettingsToolWindow::PlatformEnabled(PlatformId platformId)
+    bool ProjectSettingsToolWindow::PlatformEnabled([[maybe_unused]] PlatformId platformId)
     {
-        // iOS can be disabled if the plist file is missing
-        if (platformId == PlatformId::Ios)
-        {
-            AZStd::string plistPath = GetPlatformResource(platformId);
-            return !plistPath.empty();
-        }
-        // Android can be disabled if the android_project.json file is missing
-        else if (platformId == PlatformId::Android)
-        {
-            const auto androidProjectJson = AZ::IO::FixedMaxPath(m_projectRoot) / AndroidSettingsJsonPath;
-            return AZ::IO::SystemFile::Exists(androidProjectJson.c_str());
-        }
-
         return true;
     }
 
-    AZStd::string ProjectSettingsToolWindow::GetPlatformResource(PlatformId platformId)
+    AZStd::string ProjectSettingsToolWindow::GetPlatformResource([[maybe_unused]] PlatformId platformId)
     {
-        if (platformId == PlatformId::Ios)
-        {
-            for (const auto iosSettingsPListPath : IosSettingsPListPaths)
-            {
-                const auto iosPList = AZ::IO::FixedMaxPath(m_projectRoot) / iosSettingsPListPath;
-
-                if (AZ::IO::SystemFile::Exists(iosPList.c_str()))
-                {
-                    return iosPList.LexicallyNormal().String();
-                }
-            }
-        }
-        else if (platformId == PlatformId::Android)
-        {
-            const auto androidProjectJson = AZ::IO::FixedMaxPath(m_projectRoot) / AndroidSettingsJsonPath;
-
-            if (AZ::IO::SystemFile::Exists(androidProjectJson.c_str()))
-            {
-                return androidProjectJson.LexicallyNormal().String();
-            }
-        }
-
         return AZStd::string();
     }
 

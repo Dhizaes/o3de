@@ -148,20 +148,6 @@ void RCcontrollerUnitTests::PrepareCompileGroupTests(const QStringList& tempJobN
         m_createdJobs.push_back(job);
     }
 
-    // double them up for "android" to make sure that platform is respected
-    for (QString name : tempJobNames)
-    {
-        AZ::Uuid uuidOfSource = AZ::Uuid::CreateName(name.toUtf8().constData());
-        RCJob* job0 = new RCJob(m_rcJobListModel);
-        AssetProcessor::JobDetails jobDetails;
-        jobDetails.m_jobEntry.m_sourceAssetReference = AssetProcessor::SourceAssetReference("c:/somerandomfolder/dev", name);
-        jobDetails.m_jobEntry.m_platformInfo = { "android" ,{ "mobile", "renderer" } };
-        jobDetails.m_jobEntry.m_jobKey = "Compile Other Stuff";
-        jobDetails.m_jobEntry.m_sourceFileUUID = uuidOfSource;
-        job0->Init(jobDetails);
-        m_rcJobListModel->addNewJob(job0);
-    }
-
     ConnectCompileGroupSignalsAndSlots(gotCreated, gotCompleted, gotGroupID, gotStatus);
 }
 
@@ -585,11 +571,6 @@ TEST_F(RCcontrollerUnitTests, TestRCController_FeedDuplicateJobs_NotAccept)
     m_rcController->JobSubmitted(details);
     QCoreApplication::processEvents(QEventLoop::AllEvents);
     EXPECT_FALSE(gotJobsInQueueCall);
-
-    // submit same job but different platform:
-    details.m_jobEntry = JobEntry(AssetProcessor::SourceAssetReference("d:/test", "test1.txt"), AZ::Uuid("{7954065D-CFD1-4666-9E4C-3F36F417C7AC}"), { "android" ,{ "mobile", "renderer" } }, "Test Job", 1234, 3, sourceId);
-    m_rcController->JobSubmitted(details);
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
 
     EXPECT_TRUE(gotJobsInQueueCall);
     EXPECT_EQ(jobsInQueueCount, priorJobs);

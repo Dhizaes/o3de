@@ -22,12 +22,10 @@ namespace O3DE::ProjectManager
     public:
         enum Platform
         {
-            Android = 1 << 0,
-            iOS = 1 << 1,
-            Linux = 1 << 2,
-            macOS = 1 << 3,
-            Windows = 1 << 4,
-            NumPlatforms = 5
+            Linux = 1 << 0,
+            macOS = 1 << 1,
+            Windows = 1 << 2,
+            NumPlatforms = 3
         };
         Q_DECLARE_FLAGS(Platforms, Platform)
         static QString GetPlatformString(Platform platform);

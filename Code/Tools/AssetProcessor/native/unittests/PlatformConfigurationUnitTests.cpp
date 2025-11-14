@@ -123,8 +123,7 @@ protected:
     PlatformConfiguration m_config;
     AZStd::vector<ScanFolderInfo> m_scanFolders;
     AZStd::vector<AssetBuilderSDK::PlatformInfo> m_enabledPlatforms = {
-        { "pc",{ "desktop", "host" }},
-        { "android",{ "mobile", "android" }}
+        { "pc",{ "desktop", "host" }}
     };
     RecognizerContainer m_txtRecognizerContainer;
     AssetRecognizer m_formatRecognizer;

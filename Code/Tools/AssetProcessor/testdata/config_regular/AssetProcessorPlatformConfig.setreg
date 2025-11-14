@@ -5,9 +5,6 @@
                 "Platform pc": {
                     "tags": "tools,renderer"
                 },
-                "Platform android": {
-                    "tags": "android,mobile,renderer"
-                },
                 "Platform mac": {
                     "tags": "tools,renderer"
                 },
@@ -59,7 +56,6 @@
                     "glob": "*.i_caf",
                     "params": "defaultparams",
                     "server": "skip",
-                    "android": "mobile",
                     "priority": 5,
                     "checkServer": true
                 },
@@ -71,7 +67,6 @@
                 "RC mov": {
                     "glob": "*.mov",
                     "params": "copy",
-                    "android": "platformspecificoverride",
                     "renderer": "rendererparams"
                 },
                 "RC rend": {

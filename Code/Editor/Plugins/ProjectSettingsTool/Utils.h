@@ -25,15 +25,4 @@ namespace ProjectSettingsTool
     // CurrentFile is where the dialog opens
     QString SelectXmlFromFileDialog(const QString& currentFile);
     QString SelectImageFromFileDialog(const QString& currentFile);
-
-    enum class ImageGroup
-    {
-        AndroidIcons,
-        AndroidLandscape,
-        AndroidPortrait,
-        IosIcons,
-        IosLaunchScreens
-    };
-
-    AZStd::string GenDefaultImagePath(ImageGroup group, AZStd::string size);
 } // namespace ProjectSettingsTool

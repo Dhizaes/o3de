@@ -42,10 +42,6 @@ namespace O3DE::ProjectManager
     {
         switch (platform)
         {
-        case Android:
-            return QObject::tr("Android");
-        case iOS:
-            return QObject::tr("iOS");
         case Linux:
             return QObject::tr("Linux");
         case macOS:
@@ -152,14 +148,6 @@ namespace O3DE::ProjectManager
         else if(platformText == "Linux")
         {
             return GemInfo::Platform::Linux;
-        }
-        else if(platformText == "Android")
-        {
-            return GemInfo::Platform::Android;
-        }
-        else if(platformText == "iOS")
-        {
-            return GemInfo::Platform::iOS;
         }
         else if(platformText == "macOS")
         {

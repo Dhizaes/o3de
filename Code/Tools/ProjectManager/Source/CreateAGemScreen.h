@@ -115,8 +115,7 @@ namespace O3DE::ProjectManager
 
         QString m_gemActionString;
 
-        GemInfo::Platforms m_platformSupportMask = GemInfo::Platform::Windows | GemInfo::Platform::Linux |
-                                                 GemInfo::Platform::iOS | GemInfo::Platform::Android;
+        GemInfo::Platforms m_platformSupportMask = GemInfo::Platform::Windows | GemInfo::Platform::Linux;
 
     private:
         void LoadButtonsFromGemTemplatePaths(QVBoxLayout* gemSetupLayout);

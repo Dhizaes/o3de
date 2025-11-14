@@ -14,7 +14,7 @@ ly_add_target(
         ${pal_dir}/${LY_BUILD_PERMUTATION}/${NameLower}.cmake
 ```
 
-The PLATFORM_INCLUDE_FILES are first segmented by OS platform first(Platform/Linux, Platform/Mac, Platform/Android, Platform/Windows, Platform/iOS) followed by having a build directory based on the build permutation that O3DE is using.
+The PLATFORM_INCLUDE_FILES are first segmented by OS platform first(Platform/Linux, Platform/Mac, Platform/Windows) followed by having a build directory based on the build permutation that O3DE is using.
 Those files are pre-configured to set the `IMPORTED_LOCATION` for an existing target
 
 ### What is a Build Permutation?

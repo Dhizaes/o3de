@@ -107,10 +107,6 @@ namespace ImageProcessingAtomEditor
         {
             readableString = "Linux";
         }
-        else if (platformStrLowerCase == "android")
-        {
-            readableString = "Android";
-        }
         else if (platformStrLowerCase == "mac")
         {
             readableString = "macOS";
@@ -118,10 +114,6 @@ namespace ImageProcessingAtomEditor
         else if (platformStrLowerCase == "provo")
         {
             readableString = "Provo";
-        }
-        else if (platformStrLowerCase == "ios")
-        {
-            readableString = "iOS";
         }
         else if (platformStrLowerCase == "salem")
         {

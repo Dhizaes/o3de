@@ -87,10 +87,6 @@
 #include <AzFramework/Archive/Archive.h>
 #include <CrySystemBus.h>
 
-#if defined(ANDROID)
-#include <AzCore/Android/Utils.h>
-#endif
-
 #if defined(EXTERNAL_CRASH_REPORTING)
 #include <CrashHandler.h>
 #endif
@@ -217,10 +213,6 @@ static ESystemConfigPlatform GetDevicePlatform()
 #endif
 #if defined(AZ_RESTRICTED_SECTION_IMPLEMENTED)
 #undef AZ_RESTRICTED_SECTION_IMPLEMENTED
-#elif defined(AZ_PLATFORM_ANDROID)
-    return CONFIG_ANDROID;
-#elif defined(AZ_PLATFORM_IOS)
-    return CONFIG_IOS;
 #elif defined(AZ_PLATFORM_MAC)
     return CONFIG_OSX_METAL;
 #else
@@ -316,10 +308,6 @@ void CSystem::ShutdownFileSystem()
 /////////////////////////////////////////////////////////////////////////////////
 bool CSystem::InitFileSystem_LoadEngineFolders(const SSystemInitParams&)
 {
-#if defined(AZ_PLATFORM_ANDROID)
-    AZ::Android::Utils::SetLoadFilesToMemory(m_sys_load_files_to_memory->GetString());
-#endif
-
     GetISystem()->SetConfigPlatform(GetDevicePlatform());
 
     auto projectPath = AZ::Utils::GetProjectPath();
@@ -438,16 +426,6 @@ void CSystem::OpenPlatformPaks()
 #define AZ_RESTRICTED_SECTION SYSTEMINIT_CPP_SECTION_15
 #include AZ_RESTRICTED_FILE(SystemInit_cpp)
 #endif
-
-#ifdef AZ_PLATFORM_ANDROID
-    const char* const assetsDir = "@products@";
-    // Load Android Obb files if available
-    const char* obbStorage = AZ::Android::Utils::GetObbStoragePath();
-    AZStd::string mainObbPath = AZStd::move(AZStd::string::format("%s/%s", obbStorage, AZ::Android::Utils::GetObbFileName(true)));
-    AZStd::string patchObbPath = AZStd::move(AZStd::string::format("%s/%s", obbStorage, AZ::Android::Utils::GetObbFileName(false)));
-    m_env.pCryPak->OpenPack(assetsDir, mainObbPath.c_str());
-    m_env.pCryPak->OpenPack(assetsDir, patchObbPath.c_str());
-#endif // AZ_PLATFORM_ANDROID
 
     InlineInitializationProcessing("CSystem::OpenPlatformPaks OpenPacks( Engine... )");
 }

@@ -20,8 +20,6 @@
         <file>ProjectManager-Icon.ico</file>
         <file>ProjectManager-Icon.svg</file>
         <file>Windows.svg</file>
-        <file>Android.svg</file>
-        <file>iOS.svg</file>
         <file>Linux.svg</file>
         <file>macOS.svg</file>
         <file>DefaultProjectImage.png</file>

@@ -114,7 +114,6 @@ namespace AZ::RHI
         //! Returns a number in the range [0..3].
         //! In theory any given AssetBuilderSdk::PlatformInfo can support several RHI::APITypes.
         //! In reality "pc" only supports DX12 & Vulkan.
-        //! "ios" supports only Metal.
         //! "mac" supports only Metal.
         //! "android" supports only Vulkan.
         //! So, for all practical purposes, a single PlatformInfo won't support more than 2 ShaderPlatformInterfaces, but for the sake of

@@ -68,7 +68,6 @@ set(FILES
     Cry_Vector3.h
     CryHalf.inl
     MathConversion.h
-    AndroidSpecific.h
     AppleSpecific.h
     Linux32Specific.h
     Linux64Specific.h

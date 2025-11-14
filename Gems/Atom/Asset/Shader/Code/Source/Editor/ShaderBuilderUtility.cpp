@@ -493,14 +493,6 @@ namespace AZ
                 {
                     platformId = AzFramework::PlatformId::MAC_ID;
                 }
-                else if (platformIdentifier == "android")
-                {
-                    platformId = AzFramework::PlatformId::ANDROID_ID;
-                }
-                else if (platformIdentifier == "ios")
-                {
-                    platformId = AzFramework::PlatformId::IOS;
-                }
                 else if (platformIdentifier == "salem")
                 {
                     platformId = AzFramework::PlatformId::SALEM;

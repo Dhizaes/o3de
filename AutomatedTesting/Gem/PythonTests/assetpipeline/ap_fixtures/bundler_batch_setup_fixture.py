@@ -285,8 +285,6 @@ def bundler_batch_setup_fixture(request, workspace, ap_setup_fixture, asset_proc
             """ Helper to fetch the platform flag from a provided platform name. """
             platform_flags = {
                 "pc": 1,
-                "android": 2,
-                "ios": 4,
                 "mac": 8,
                 "server": 128
             }

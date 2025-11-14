@@ -332,21 +332,6 @@ namespace ProjectSettingsTool
                             return false;
                         }
                     }
-                    else if (AZStd::string(childNode.GetClassMetadata()->m_name) == "IosOrientations")
-                    {
-                        // Enter even if nullptr to make sure all values should be false
-                        if (plistNode == nullptr || AZStd::string(plistNode->name()) == arrayStr)
-                        {
-                            if (!UiEqualToPlistArray(plistNode, &childNode))
-                            {
-                                return false;
-                            }
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
                     else
                     {
                         if (!UiEqualToPlistImages(&childNode))
@@ -622,14 +607,6 @@ namespace ProjectSettingsTool
                                 childNode.Write(true);
                             }
                         }
-                        else if (AZStd::string(childNode.GetClassMetadata()->m_name) == "IosOrientations")
-                        {
-                            // Make sure it seems like an array in plist as well
-                            if (AZStd::string(plistNode->name()) == arrayStr)
-                            {
-                                LoadOrientations(plistNode, &childNode);
-                            }
-                        }
                         else
                         {
                             SetClassToDefaults(&childNode);
@@ -726,14 +703,7 @@ namespace ProjectSettingsTool
             return;
         }
 
-        if (AZStd::string(node.GetClassMetadata()->m_name) == "IosOrientations")
-        {
-            LoadOrientations(nullptr, &node);
-        }
-        else
-        {
-            SetClassToDefaults(&node);
-        }
+        SetClassToDefaults(&node);
     }
 
     void Serializer::SaveToSettings(AzToolsFramework::InstanceDataNode* node)
@@ -777,22 +747,6 @@ namespace ProjectSettingsTool
                         else
                         {
                             m_plistDict->RemoveProperty(propertyName);
-                        }
-                    }
-                    else if (AZStd::string(childNode.GetClassMetadata()->m_name) == "IosOrientations")
-                    {
-                        XmlNode* plistNode = m_plistDict->GetPropertyValueNode(propertyName);
-                        if (plistNode == nullptr)
-                        {
-                            plistNode = m_plistDict->SetPropertyValueName(propertyName, arrayStr);
-                        }
-                        // Make sure the plist says this is an array type
-                        if (AZStd::string(plistNode->name()) == arrayStr)
-                        {
-                            if (!SaveOrientations(plistNode, &childNode))
-                            {
-                                m_plistDict->RemoveProperty(propertyName);
-                            }
                         }
                     }
                     //Assume this is a class with image overrides

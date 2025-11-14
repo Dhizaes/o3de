@@ -54,9 +54,6 @@
 #if defined(AZ_PLATFORM_MAC)
     #define AZ_PLATFORM_APPLE_OSX
 #endif
-#if defined(AZ_PLATFORM_IOS)
-    #define AZ_PLATFORM_APPLE_IOS
-#endif
 #if AZ_TRAIT_OS_PLATFORM_APPLE
     #define AZ_PLATFORM_APPLE
 #endif

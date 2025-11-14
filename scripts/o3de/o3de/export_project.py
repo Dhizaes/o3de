@@ -1207,10 +1207,6 @@ SETTINGS_OPTION_BUILD_TOOLS       = register_setting(key='option.build.tools',
                                                      is_boolean=True,
                                                      default='True')
 
-SETTINGS_DEFAULT_ANDROID_BUILD_PATH = register_setting(key='default.android.build.path',
-                                                       description='Designates where the android build files are generated.',
-                                                       default='build/android')
-
 #note: we are duplicating this setting specifically to reduce dependency on android_support for the android parameter configuration
 ASSET_MODE_LOOSE = 'LOOSE'
 ASSET_MODE_PAK = 'PAK'

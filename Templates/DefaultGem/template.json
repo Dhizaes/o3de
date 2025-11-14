@@ -69,22 +69,6 @@
             "isTemplated": true
         },
         {
-            "file": "Code/Platform/Android/${NameLower}_private_files.cmake",
-            "isTemplated": true
-        },
-        {
-            "file": "Code/Platform/Android/${NameLower}_shared_files.cmake",
-            "isTemplated": true
-        },
-        {
-            "file": "Code/Platform/Android/${NameLower}_api_files.cmake",
-            "isTemplated": true
-        },
-        {
-            "file": "Code/Platform/Android/PAL_android.cmake",
-            "isTemplated": true
-        },
-        {
             "file": "Code/Platform/Linux/${NameLower}_api_files.cmake",
             "isTemplated": true
         },
@@ -142,22 +126,6 @@
         },
         {
             "file": "Code/Platform/Windows/PAL_windows.cmake",
-            "isTemplated": true
-        },
-        {
-            "file": "Code/Platform/iOS/${NameLower}_api_files.cmake",
-            "isTemplated": true
-        },
-        {
-            "file": "Code/Platform/iOS/${NameLower}_private_files.cmake",
-            "isTemplated": true
-        },
-        {
-            "file": "Code/Platform/iOS/${NameLower}_shared_files.cmake",
-            "isTemplated": true
-        },
-        {
-            "file": "Code/Platform/iOS/PAL_ios.cmake",
             "isTemplated": true
         },
         {
@@ -230,9 +198,6 @@
             "dir": "Code/Platform"
         },
         {
-            "dir": "Code/Platform/Android"
-        },
-        {
             "dir": "Code/Platform/Linux"
         },
         {
@@ -240,9 +205,6 @@
         },
         {
             "dir": "Code/Platform/Windows"
-        },
-        {
-            "dir": "Code/Platform/iOS"
         },
         {
             "dir": "Code/Source"

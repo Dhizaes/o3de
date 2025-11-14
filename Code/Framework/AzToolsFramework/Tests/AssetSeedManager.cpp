@@ -91,7 +91,6 @@ namespace UnitTest
             }
 
             m_testPlatforms[0] = AzFramework::PlatformId::PC;
-            m_testPlatforms[1] = AzFramework::PlatformId::ANDROID_ID;
 
             int platformCount = 0;
             for(auto thisPlatform : m_testPlatforms)
@@ -186,20 +185,13 @@ namespace UnitTest
             AzFramework::AssetCatalog assetCatalog(useRequestBus);
 
             AZStd::string pcCatalogFile = AzToolsFramework::PlatformAddressedAssetCatalog::GetCatalogRegistryPathForPlatform(AzFramework::PlatformId::PC);
-            AZStd::string androidCatalogFile = AzToolsFramework::PlatformAddressedAssetCatalog::GetCatalogRegistryPathForPlatform(AzFramework::PlatformId::ANDROID_ID);
 
             if (!assetCatalog.SaveCatalog(pcCatalogFile.c_str(), m_assetRegistry))
             {
                 GTEST_FATAL_FAILURE_(AZStd::string::format("Unable to save the asset catalog (PC) file.\n").c_str());
             }
 
-            if (!assetCatalog.SaveCatalog(androidCatalogFile.c_str(), m_assetRegistry))
-            {
-                GTEST_FATAL_FAILURE_(AZStd::string::format("Unable to save the asset catalog (ANDROID) file.\n").c_str());
-            }
-
             m_pcCatalog = new AzToolsFramework::PlatformAddressedAssetCatalog(AzFramework::PlatformId::PC);
-            m_androidCatalog = new AzToolsFramework::PlatformAddressedAssetCatalog(AzFramework::PlatformId::ANDROID_ID);
 
             const AZStd::string engroot = AZ::Test::GetEngineRootPath();
             AZ::IO::FileIOBase::GetInstance()->SetAlias("@engroot@", engroot.c_str());
@@ -310,11 +302,8 @@ namespace UnitTest
             m_assetSeedManager->AddSeedAsset(assets[1], AzFramework::PlatformFlags::Platform_PC);
             m_assetSeedManager->AddSeedAsset(assets[2], AzFramework::PlatformFlags::Platform_PC);
 
-            // Step we are testing
-            m_assetSeedManager->AddPlatformToAllSeeds(AzFramework::PlatformId::ANDROID_ID);
-
             // Verification
-            AzFramework::PlatformFlags expectedPlatformFlags = AzFramework::PlatformFlags::Platform_PC | AzFramework::PlatformFlags::Platform_ANDROID;
+            AzFramework::PlatformFlags expectedPlatformFlags = AzFramework::PlatformFlags::Platform_PC;
             for (const auto& seedInfo : m_assetSeedManager->GetAssetSeedList())
             {
                 EXPECT_EQ(seedInfo.m_platformFlags, expectedPlatformFlags);
@@ -326,17 +315,10 @@ namespace UnitTest
             // Setup
             m_assetSeedManager->AddSeedAsset(assets[0], AzFramework::PlatformFlags::Platform_PC);
             m_assetSeedManager->AddSeedAsset(assets[1], AzFramework::PlatformFlags::Platform_PC);
-
-            m_androidCatalog->UnregisterAsset(assets[2]);
             m_assetSeedManager->AddSeedAsset(assets[2], AzFramework::PlatformFlags::Platform_PC);
 
-            // Step we are testing
-            AZ_TEST_START_TRACE_SUPPRESSION;
-            m_assetSeedManager->AddPlatformToAllSeeds(AzFramework::PlatformId::ANDROID_ID);
-            AZ_TEST_STOP_TRACE_SUPPRESSION(1); // One error expected
-
             // Verification
-            AzFramework::PlatformFlags expectedPlatformFlags = AzFramework::PlatformFlags::Platform_PC | AzFramework::PlatformFlags::Platform_ANDROID;
+            AzFramework::PlatformFlags expectedPlatformFlags = AzFramework::PlatformFlags::Platform_PC;
             for (const auto& seedInfo : m_assetSeedManager->GetAssetSeedList())
             {
                 if (seedInfo.m_assetId == assets[2])
@@ -354,14 +336,8 @@ namespace UnitTest
         {
             // Setup
             m_assetSeedManager->AddSeedAsset(assets[0], AzFramework::PlatformFlags::Platform_PC);
-            m_assetSeedManager->AddSeedAsset(assets[0], AzFramework::PlatformFlags::Platform_ANDROID);
             m_assetSeedManager->AddSeedAsset(assets[1], AzFramework::PlatformFlags::Platform_PC);
-            m_assetSeedManager->AddSeedAsset(assets[1], AzFramework::PlatformFlags::Platform_ANDROID);
             m_assetSeedManager->AddSeedAsset(assets[2], AzFramework::PlatformFlags::Platform_PC);
-            m_assetSeedManager->AddSeedAsset(assets[2], AzFramework::PlatformFlags::Platform_ANDROID);
-
-            // Step we are testing
-            m_assetSeedManager->RemovePlatformFromAllSeeds(AzFramework::PlatformId::ANDROID_ID);
 
             // Verification
             for (const auto& seedInfo : m_assetSeedManager->GetAssetSeedList())
@@ -485,8 +461,8 @@ namespace UnitTest
 
         void DependencyValidation_MultipleAssetSeeds_MultiplePlatformFlags_ListValid()
         {
-            m_assetSeedManager->AddSeedAsset(assets[0], AzFramework::PlatformFlags::Platform_PC | AzFramework::PlatformFlags::Platform_ANDROID);
-            m_assetSeedManager->AddSeedAsset(assets[5], AzFramework::PlatformFlags::Platform_PC | AzFramework::PlatformFlags::Platform_ANDROID);
+            m_assetSeedManager->AddSeedAsset(assets[0], AzFramework::PlatformFlags::Platform_PC);
+            m_assetSeedManager->AddSeedAsset(assets[5], AzFramework::PlatformFlags::Platform_PC);
 
             AzToolsFramework::AssetFileInfoList assetList = m_assetSeedManager->GetDependencyList(AzFramework::PlatformId::PC);
 
@@ -502,7 +478,7 @@ namespace UnitTest
 
             assetList.m_fileInfoList.clear();
 
-            m_assetSeedManager->AddSeedAsset(assets[8], AzFramework::PlatformFlags::Platform_PC | AzFramework::PlatformFlags::Platform_ANDROID);
+            m_assetSeedManager->AddSeedAsset(assets[8], AzFramework::PlatformFlags::Platform_PC);
 
             assetList = m_assetSeedManager->GetDependencyList(AzFramework::PlatformId::PC);
 
@@ -518,7 +494,7 @@ namespace UnitTest
             EXPECT_TRUE(Search(assetList, assets[8]));
 
             assetList.m_fileInfoList.clear();
-            m_assetSeedManager->RemoveSeedAsset(assets[5], AzFramework::PlatformFlags::Platform_PC | AzFramework::PlatformFlags::Platform_ANDROID);
+            m_assetSeedManager->RemoveSeedAsset(assets[5], AzFramework::PlatformFlags::Platform_PC);
 
             assetList = m_assetSeedManager->GetDependencyList(AzFramework::PlatformId::PC);
 
@@ -532,9 +508,6 @@ namespace UnitTest
             EXPECT_TRUE(Search(assetList, assets[7]));
             EXPECT_TRUE(Search(assetList, assets[8]));
 
-            // Removing the android flag from the asset should still produce the same result
-            m_assetSeedManager->RemoveSeedAsset(assets[8], AzFramework::PlatformFlags::Platform_ANDROID);
-
             assetList = m_assetSeedManager->GetDependencyList(AzFramework::PlatformId::PC);
 
             EXPECT_EQ(assetList.m_fileInfoList.size(), 8);
@@ -546,8 +519,6 @@ namespace UnitTest
             EXPECT_TRUE(Search(assetList, assets[6]));
             EXPECT_TRUE(Search(assetList, assets[7]));
             EXPECT_TRUE(Search(assetList, assets[8]));
-
-            assetList = m_assetSeedManager->GetDependencyList(AzFramework::PlatformId::ANDROID_ID);
 
             EXPECT_EQ(assetList.m_fileInfoList.size(), 5);
             EXPECT_TRUE(Search(assetList, assets[0]));
@@ -555,10 +526,6 @@ namespace UnitTest
             EXPECT_TRUE(Search(assetList, assets[2]));
             EXPECT_TRUE(Search(assetList, assets[3]));
             EXPECT_TRUE(Search(assetList, assets[4]));
-
-            // Adding the android flag again to the asset
-            m_assetSeedManager->AddSeedAsset(assets[8], AzFramework::PlatformFlags::Platform_ANDROID);
-            assetList = m_assetSeedManager->GetDependencyList(AzFramework::PlatformId::ANDROID_ID);
 
             EXPECT_EQ(assetList.m_fileInfoList.size(), 8);
             EXPECT_TRUE(Search(assetList, assets[0]));
@@ -914,7 +881,7 @@ namespace UnitTest
     TEST_F(AssetSeedManagerTest, AddSeedAssetForValidPlatforms_AllPlatformsValid_SeedAddedForEveryInputPlatform)
     {
         using namespace AzFramework;
-        PlatformFlags validPlatforms = PlatformFlags::Platform_PC | PlatformFlags::Platform_ANDROID;
+        PlatformFlags validPlatforms = PlatformFlags::Platform_PC;
         AZStd::pair<AZ::Data::AssetId, PlatformFlags> result = m_assetSeedManager->AddSeedAssetForValidPlatforms(TestDynamicSliceAssetPath, validPlatforms);
 
         // Verify the function outputs
@@ -931,7 +898,7 @@ namespace UnitTest
     TEST_F(AssetSeedManagerTest, AddSeedAssetForValidPlatforms_SomePlatformsValid_SeedAddedForEveryValidPlatform)
     {
         using namespace AzFramework;
-        PlatformFlags validPlatforms = PlatformFlags::Platform_PC | PlatformFlags::Platform_ANDROID;
+        PlatformFlags validPlatforms = PlatformFlags::Platform_PC;
         PlatformFlags inputPlatforms = validPlatforms | PlatformFlags::Platform_MAC;
         AZStd::pair<AZ::Data::AssetId, PlatformFlags> result = m_assetSeedManager->AddSeedAssetForValidPlatforms(TestDynamicSliceAssetPath, inputPlatforms);
 

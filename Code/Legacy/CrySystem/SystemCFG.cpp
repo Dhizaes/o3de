@@ -195,10 +195,6 @@ void CSystem::LogVersion()
 #if defined(AZ_RESTRICTED_PLATFORM)
 #define AZ_RESTRICTED_SECTION SYSTEMCFG_CPP_SECTION_2
 #include AZ_RESTRICTED_FILE(SystemCFG_cpp)
-#elif defined(ANDROID)
-    CryLogAlways("Running 32 bit Android version API VER:%d", __ANDROID_API__);
-#elif defined(IOS)
-    CryLogAlways("Running 64 bit iOS version");
 #elif defined(WIN64)
     CryLogAlways("Running 64 bit Windows version");
 #elif defined(WIN32)

@@ -167,10 +167,6 @@
         #include "Linux64Specific.h"
     #elif defined(MAC)
         #include "MacSpecific.h"
-    #elif defined(ANDROID)
-        #include "AndroidSpecific.h"
-    #elif defined(IOS)
-        #include "iOSSpecific.h"
     #endif
 #endif
 

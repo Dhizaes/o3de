@@ -19,8 +19,6 @@
     <Platform atl_name="windows" atl_config_group_name="default"/>
     <Platform atl_name="mac" atl_config_group_name="default"/>
     <Platform atl_name="linux" atl_config_group_name="default"/>
-    <Platform atl_name="android" atl_config_group_name="default"/>
-    <Platform atl_name="ios" atl_config_group_name="default"/>
     <Platform atl_name="provo" atl_config_group_name="default"/>
    </ATLPlatforms>
    <ATLConfigGroup atl_name="default">
@@ -32,8 +30,6 @@
     <Platform atl_name="windows" atl_config_group_name="default"/>
     <Platform atl_name="mac" atl_config_group_name="default"/>
     <Platform atl_name="linux" atl_config_group_name="default"/>
-    <Platform atl_name="android" atl_config_group_name="default"/>
-    <Platform atl_name="ios" atl_config_group_name="default"/>
     <Platform atl_name="provo" atl_config_group_name="default"/>
    </ATLPlatforms>
    <ATLConfigGroup atl_name="default">

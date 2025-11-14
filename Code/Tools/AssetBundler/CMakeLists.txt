@@ -212,15 +212,6 @@ if(PAL_TRAIT_BUILD_TESTS_SUPPORTED)
             AssetBundler.Tests.dir/Gems/GemB/Assets/Platforms
     )
 
-    ly_add_target_files(
-        TARGETS
-            AssetBundler.Tests
-        FILES
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/Gems/GemB/Assets/Platforms/ios/AssetSeedList.seed
-        OUTPUT_SUBDIRECTORY
-            AssetBundler.Tests.dir/Gems/GemB/Assets/Platforms/ios
-    )
-
      ly_add_target_files(
         TARGETS
             AssetBundler.Tests

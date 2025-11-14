@@ -44,8 +44,6 @@ namespace ProjectSettingsTool
     struct Properties
     {
         BaseSettings base;
-        AndroidSettings android;
-        IosSettings ios;
     };
 
     // Main window for Project Settings tool

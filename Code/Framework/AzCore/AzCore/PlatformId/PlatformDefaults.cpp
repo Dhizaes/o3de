@@ -15,24 +15,15 @@ namespace AZ
 {
     inline namespace PlatformDefaults
     {
-        static const char* PlatformNames[PlatformId::NumPlatformIds] = { PlatformPC, PlatformLinux, PlatformAndroid, PlatformIOS, PlatformMac, PlatformProvo, PlatformSalem, PlatformJasper, PlatformServer, PlatformAll, PlatformAllClient };
+        static const char* PlatformNames[PlatformId::NumPlatformIds] = { PlatformPC, PlatformLinux, PlatformMac, PlatformProvo, PlatformSalem, PlatformJasper, PlatformServer, PlatformAll, PlatformAllClient };
 
         const char* PlatformIdToPalFolder(AZ::PlatformId platform)
-        {
-#ifdef IOS
-#define AZ_REDEFINE_IOS_AT_END IOS
-#undef IOS
-#endif
-            switch (platform)
+        {            switch (platform)
             {
             case AZ::PC:
                 return "PC";
             case AZ::LINUX_ID:
                 return "Linux";
-            case AZ::ANDROID_ID:
-                return "Android";
-            case AZ::IOS:
-                return "iOS";
             case AZ::MAC_ID:
                 return "Mac";
             case AZ::PROVO:
@@ -50,10 +41,6 @@ namespace AZ
             default:
                 return "";
             }
-
-#ifdef AZ_REDEFINE_IOS_AT_END
-#define IOS AZ_REDEFINE_IOS_AT_END
-#endif
         }
 
         const char* OSPlatformToDefaultAssetPlatform(AZStd::string_view osPlatform)
@@ -69,14 +56,6 @@ namespace AZ
             else if (osPlatform == PlatformCodeNameMac)
             {
                 return PlatformMac;
-            }
-            else if (osPlatform == PlatformCodeNameAndroid)
-            {
-                return PlatformAndroid;
-            }
-            else if (osPlatform == PlatformCodeNameiOS)
-            {
-                return PlatformIOS;
             }
             else if (osPlatform == PlatformCodeNameProvo)
             {
@@ -198,11 +177,8 @@ namespace AZ
 
         void PlatformHelper::AppendPlatformCodeNames(AZStd::fixed_vector<AZStd::string_view, MaxPlatformCodeNames>& platformCodes, PlatformId platformId)
         {
-            // The IOS SDK has a macro that defines IOS as 1 which causes the enum below to be incorrectly converted to "PlatformId::1".
-#pragma push_macro("IOS")
-#undef IOS
         // To reduce work the Asset Processor groups assets that can be shared between hardware platforms together. For this
-        // reason "PC" can for instance cover both the Windows and Linux platforms and "IOS" can cover AppleTV and iOS.
+        // reason "PC" can for instance cover both the Windows and Linux platforms.
             switch (platformId)
             {
             case PlatformId::PC:
@@ -210,12 +186,6 @@ namespace AZ
                 break;
             case PlatformId::LINUX_ID:
                 platformCodes.emplace_back(PlatformCodeNameLinux);
-                break;
-            case PlatformId::ANDROID_ID:
-                platformCodes.emplace_back(PlatformCodeNameAndroid);
-                break;
-            case PlatformId::IOS:
-                platformCodes.emplace_back(PlatformCodeNameiOS);
                 break;
             case PlatformId::MAC_ID:
                 platformCodes.emplace_back(PlatformCodeNameMac);
@@ -237,7 +207,6 @@ namespace AZ
                 AZ_Assert(false, "Unsupported Platform ID: %i", platformId);
                 break;
             }
-#pragma pop_macro("IOS")
         }
 
         int PlatformHelper::GetPlatformIndexFromName(AZStd::string_view platformName)

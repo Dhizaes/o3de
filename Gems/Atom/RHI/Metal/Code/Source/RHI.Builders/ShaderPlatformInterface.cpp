@@ -24,9 +24,7 @@ namespace AZ
     {
         static const char* MetalShaderPlatformName = "MetalShaderPlatform";
         static const char* MacPlatformShaderHeader = "Builders/ShaderHeaders/Platform/Mac/Metal/PlatformHeader.hlsli";
-        static const char* IosPlatformShaderHeader = "Builders/ShaderHeaders/Platform/iOS/Metal/PlatformHeader.hlsli";
         static const char* MacAzslShaderHeader = "Builders/ShaderHeaders/Platform/Mac/Metal/AzslcHeader.azsli";
-        static const char* IosAzslShaderHeader = "Builders/ShaderHeaders/Platform/iOS/Metal/AzslcHeader.azsli";
 
         ShaderPlatformInterface::ShaderPlatformInterface(uint32_t apiUniqueIndex)
             : RHI::ShaderPlatformInterface(apiUniqueIndex)
@@ -158,14 +156,7 @@ namespace AZ
 
         const char* ShaderPlatformInterface::GetAzslHeader(const AssetBuilderSDK::PlatformInfo& platform) const
         {
-            if(platform.HasTag("mobile"))
-            {
-                return IosAzslShaderHeader;
-            }
-            else
-            {
-                return MacAzslShaderHeader;
-            }
+            return MacAzslShaderHeader;
         }
 
        bool ShaderPlatformInterface::CompilePlatformInternal(
@@ -271,14 +262,7 @@ namespace AZ
             AZStd::string shaderSpirvOutputFile = RHI::BuildFileNameWithExtension(shaderSourceFile, tempFolder, "spirv");
 
             AZStd::string prependFile;
-            if(platform.HasTag("mobile"))
-            {
-                prependFile = IosPlatformShaderHeader;
-            }
-            else
-            {
-                prependFile = MacPlatformShaderHeader;
-            }
+            prependFile = MacPlatformShaderHeader;
 
             RHI::PrependArguments args;
             args.m_sourceFile = shaderSourceFile.c_str();
