@@ -348,8 +348,9 @@ namespace AZ
                                                    VK_EXT_LOAD_STORE_OP_NONE_EXTENSION_NAME,
                                                    VK_EXT_SUBPASS_MERGE_FEEDBACK_EXTENSION_NAME,
                                                    VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME,
-                                                   VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME,
-                                                   ExternalSemaphoreExtensionName } };
+                                                   ExternalSemaphoreExtensionName,
+                                                   VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME
+                                                   } };
 
             [[maybe_unused]] uint32_t optionalExtensionCount = aznumeric_cast<uint32_t>(optionalExtensions.size());
 
