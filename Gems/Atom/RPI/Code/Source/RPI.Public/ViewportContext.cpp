@@ -146,14 +146,6 @@ namespace AZ
                 }
             };
 
-            auto stopRenderingPipeline = [](RenderPipelinePtr& pipeline)
-            {
-                if (pipeline && pipeline->GetRenderMode() != RenderPipeline::RenderMode::NoRender)
-                {
-                    pipeline->RemoveFromRenderTick();
-                }
-            };
-
             // Render default pipeline
             renderPipelineOnce(m_currentPipelines[static_cast<size_t>(AZ::RPI::ViewType::Default)]);
         }
