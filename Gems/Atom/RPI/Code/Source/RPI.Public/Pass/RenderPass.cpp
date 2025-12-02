@@ -274,14 +274,11 @@ namespace AZ
 
             // the pass may potentially migrate between devices dynamically at runtime so the deviceIndex is updated every frame.
             auto passDeviceIndex = Pass::GetDeviceIndex();
-
             if (passDeviceIndex == RHI::MultiDevice::InvalidDeviceIndex)
             {
                 passDeviceIndex = RHI::MultiDevice::DefaultDeviceIndex;
             }
-
             if (GetScopeId().IsEmpty() || (ScopeProducer::GetDeviceIndex() != passDeviceIndex))
-
             {
                 InitScope(RHI::ScopeId(GetPathName()), m_hardwareQueueClass, passDeviceIndex);
             }

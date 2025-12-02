@@ -7,7 +7,6 @@
 #
 
 o3de_gem_setup("PhysX")
-
 get_property(v_hacd_gem_root GLOBAL PROPERTY "@GEMROOT:PhysXCommon@")
 list(APPEND CMAKE_MODULE_PATH ${v_hacd_gem_root}/3rdParty)
 
